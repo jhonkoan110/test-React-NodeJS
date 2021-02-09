@@ -1,0 +1,19 @@
+.specialisations__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ececec;
+}
+
+.specialisations__item__name {
+    margin-top: 0.5rem;
+    width: 80%;
+    font-size: 1.2rem;
+    padding: 0.5rem;
+    border: 0;
+    outline: 0;
+}
+
+.specialisations__item__name:focus {
+    outline: 2px solid black;
+}

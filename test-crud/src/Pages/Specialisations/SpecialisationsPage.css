@@ -1,0 +1,23 @@
+.specialisations__header {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid #ececec;
+}
+
+.specialisations__add-button {
+    background-color: #fff;
+    border: none;
+    outline: none;
+    cursor: pointer;
+
+    font-size: 1.2rem;
+}
+
+.specialisations__loader {
+    margin-top: 1rem;
+}
+
+.specialisations__body {
+    margin-top: 1rem;
+}

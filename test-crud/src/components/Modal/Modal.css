@@ -1,0 +1,97 @@
+.modal {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: 0;
+}
+
+.modal__content {
+    background-color: #fff;
+    border-radius: 13px;
+
+    width: 600px;
+    padding: 1rem;
+    position: relative;
+    pointer-events: all;
+}
+
+.modal__header {
+    padding: 1rem 0;
+    border-bottom: 1px solid #ececec;
+}
+
+.modal__close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 25px;
+    font-weight: bold;
+    background-color: #fff;
+    border: 0;
+    outline: 0;
+    cursor: pointer;
+    line-height: 29px;
+}
+
+.modal__content__body {
+    margin-top: 1rem;
+}
+
+.modal__content__input {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 1rem;
+    font-size: 1.2rem;
+    font-family: 'YS Text', Helvetica Neue, Arial, sans-serif;
+    border: 2px solid #ececec;
+    border-radius: 4px;
+    outline: 0;
+}
+.modal__content__input:first-child {
+    margin-top: 0;
+}
+
+.modal__content__input:focus {
+    border: 2px solid black;
+}
+
+.modal__content__actions {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.modal__content__actions__buttons {
+    padding: 1rem;
+    background-color: #fff;
+    border: 2px solid #ececec;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'YS Text', Helvetica Neue, Arial, sans-serif;
+    font-size: 16px;
+    outline: 0;
+}
+
+.modal__content__actions__add-button {
+    padding: 1rem;
+    background-color: #fff;
+    border: 2px solid #ececec;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'YS Text', Helvetica Neue, Arial, sans-serif;
+    font-size: 16px;
+    outline: 0;
+}
+
+.modal__content__actions__buttons:hover {
+    border: 2px solid black;
+    color: #d00;
+}

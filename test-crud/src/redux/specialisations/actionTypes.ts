@@ -1,0 +1,7 @@
+export const SET_SPECIALISATIONS: string = 'SET_SPECIALISATIONS';
+export const IS_LOADING: string = 'IS_LOADING';
+export const HAS_ERRORED: string = 'HAS_ERRORED';
+export const START_EDIT: string = 'START_EDIT';
+export const DELETE_SPECIALISATION: string = 'DELETE_SPECIALISATION';
+export const ADD_SPECIALISATION: string = 'ADD_SPECIALISATION';
+export const SAVE_UPDATED_SPECIALISATION = 'SAVE_UPDATED_SPECIALISATION';
