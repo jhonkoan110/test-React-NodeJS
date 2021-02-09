@@ -3,18 +3,24 @@ import { ISpecialisation } from '../../redux/specialisations/reducer';
 import './Dropdown.css';
 
 interface DropdownProps {
+    name?: string;
     selectedSpec: string;
     specialisations: Array<ISpecialisation>;
     onSpecClick: (id: number, specialisation: string) => void;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ selectedSpec, specialisations, onSpecClick }) => {
+const Dropdown: React.FC<DropdownProps> = ({
+    name,
+    selectedSpec,
+    specialisations,
+    onSpecClick,
+}) => {
     return (
         <div className="dropdown">
             <div className="dropdown__select">
                 <div className="select">
                     <span className="select-placeholder">
-                        {selectedSpec || 'Выберите специализацию'}
+                        {selectedSpec || name || 'Выберите специализацию'}
                     </span>
                 </div>
                 <div className="triangle"></div>

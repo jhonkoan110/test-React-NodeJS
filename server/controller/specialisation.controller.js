@@ -32,8 +32,18 @@ class SpecialisationController {
 
     async deleteSpecialisation(req, res) {
         const id = req.params.id;
-        const specialisation = await db.query(`DELETE FROM specialisation where id = $1`, [id]);
-        res.json(specialisation.rows[0]);
+        // Запрашиваются мастера по id специализации
+        const masters = await db.query(`SELECT * FROM master where specialisation_id = $1`, [id]);
+        // Если есть хотя бы 1, возвращается ошибка
+        if (masters.rows.length > 0) {
+            res.status(400).json({
+                title: `У этой специализации ещё есть мастер(-а)`,
+            });
+            // Если нет - специализация удаляется
+        } else {
+            const specialisation = await db.query(`DELETE FROM specialisation where id = $1`, [id]);
+            res.json(specialisation.rows[0]);
+        }
     }
 }
 

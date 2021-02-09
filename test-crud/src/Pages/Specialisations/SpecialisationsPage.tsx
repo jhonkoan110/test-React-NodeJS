@@ -68,7 +68,7 @@ const SpecialisationsPage: React.FC = () => {
                 </button>
 
                 {isActiveModal && (
-                    <Modal header="специализацию" onCloseModalClick={closeModalHandler}>
+                    <Modal header="Добавить специализацию" onCloseModalClick={closeModalHandler}>
                         <input
                             className="modal__content__input"
                             type="text"

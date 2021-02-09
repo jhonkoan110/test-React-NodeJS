@@ -17,7 +17,7 @@ const MastersPage = () => {
         firstname: '',
         lastname: '',
         middlename: '',
-        specialisationId: 0,
+        specialisation_id: 0,
     });
     const currentId = useSelector((state: AppStateType) => state.masterList.currentId);
     const [selectedSpec, setSelectedSpec] = useState('');
@@ -52,7 +52,7 @@ const MastersPage = () => {
         setSelectedSpec(specialisationName);
         setMaster({
             ...master,
-            specialisationId: id,
+            specialisation_id: id,
         });
     };
 
@@ -64,8 +64,9 @@ const MastersPage = () => {
             login: master.login,
             lastname: master.lastname,
             middlename: master.middlename,
-            specialisationId: master.specialisationId,
+            specialisation_id: master.specialisation_id,
             name: selectedSpec,
+            isReadonly: true,
         };
 
         console.log(newMaster);

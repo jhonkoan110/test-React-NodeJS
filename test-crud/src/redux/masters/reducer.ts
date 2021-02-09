@@ -1,12 +1,13 @@
-import { ADD_MASTER, DELETE_MASTER, SET_MASTERS } from './actionTypes';
+import { ADD_MASTER, DELETE_MASTER, SET_MASTERS, START_EDIT_MASTER } from './actionTypes';
 export interface IMaster {
     id: number;
     login: string;
     firstname: string;
     lastname: string;
     middlename: string;
-    specialisationId: number;
+    specialisation_id: number;
     name: string;
+    isReadonly: boolean;
 }
 
 const initisalState = {
@@ -37,6 +38,16 @@ const mastersReducer = (state: InitialStateType = initisalState, action: any): I
 
         case DELETE_MASTER: {
             return { ...state, masters: state.masters.filter((item) => item.id !== action.id) };
+        }
+
+        case START_EDIT_MASTER: {
+            const newMasters = state.masters.map((item) => {
+                if (item.id === action.id) {
+                    item.isReadonly = false;
+                }
+                return item;
+            });
+            return { ...state, masters: newMasters };
         }
 
         default:

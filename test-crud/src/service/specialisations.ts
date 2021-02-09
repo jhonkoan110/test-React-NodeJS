@@ -51,7 +51,11 @@ export const createSpecialisation = (newSpecialisation: ISpecialisation) => (dis
             dispatch(isLoading(false));
             return response;
         })
-        .then((response) => response.json())
+        .then((response) => {
+            console.log(response);
+
+            return response.json();
+        })
         .then((data) => {
             dispatch(addSpecialisation(data));
             dispatch(getSpecialisations());
@@ -72,13 +76,17 @@ export const deleteSpecialisation = (id: number) => (dispatch: any) => {
             }
 
             dispatch(isLoading(false));
+            dispatch(hasErrored(false));
             return response;
         })
         .then(() => {
             dispatch(deleteSpecialisations(id));
             dispatch(getSpecialisations());
         })
-        .catch(() => dispatch(hasErrored(true)));
+        .catch(() => {
+            dispatch(isLoading(false));
+            dispatch(hasErrored(true));
+        });
 };
 
 // Обновить специализацию по id

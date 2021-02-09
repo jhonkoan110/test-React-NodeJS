@@ -2,3 +2,12 @@
     padding: 1rem 0;
     width: 16%;
 }
+
+.tbody__row__item {
+    margin-top: 0.5rem;
+    width: 80%;
+    font-size: 1.2rem;
+    padding: 0.5rem;
+    border: 0;
+    outline: 0;
+}

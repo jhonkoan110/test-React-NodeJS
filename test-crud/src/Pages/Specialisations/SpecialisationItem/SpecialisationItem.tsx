@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { startEdit } from '../../../redux/specialisations/actionCreators';
+import { useDispatch, useSelector } from 'react-redux';
+import Modal from '../../../components/Modal/Modal';
+import { hasErrored, startEdit } from '../../../redux/specialisations/actionCreators';
 import { ISpecialisation } from '../../../redux/specialisations/reducer';
+import { AppStateType } from '../../../redux/store';
 import { updateSpecialisation } from '../../../service/specialisations';
 import './SpecialisationItem.css';
 
@@ -14,6 +16,11 @@ const SpecialisationItem: React.FC<SpecialisationItemProps> = ({ item, onDeleteC
     const { id, isReadonly } = item;
     const [name, setName] = useState(item.name);
     const dispatch = useDispatch();
+    const isError = useSelector((state: AppStateType) => state.specialisationList.hasErrored);
+
+    const closeModalClickHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        dispatch(hasErrored(false));
+    };
 
     // Начать редактирование
     const startEditClickHandler = (id: number) => {
@@ -43,6 +50,13 @@ const SpecialisationItem: React.FC<SpecialisationItemProps> = ({ item, onDeleteC
                 readOnly={isReadonly}
                 onChange={changeNameHandler}
             />
+            {isError && (
+                <Modal header="Невозможно удалить" onCloseModalClick={closeModalClickHandler}>
+                    <p className="specialisations__item__error">
+                        У этой специализации ещё есть мастер(-а).
+                    </p>
+                </Modal>
+            )}
             <div className="buttons">
                 {isReadonly ? (
                     <button className="item__buttons" onClick={() => startEditClickHandler(id)}>

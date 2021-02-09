@@ -6,9 +6,9 @@ router.post('/master', masterController.createMaster);
 
 router.get('/master', masterController.getMasters);
 
-// router.get('/master/:id', masterController.getOneMaster);
-
 router.get('/master', masterController.getMastersBySpecialisation);
+
+router.put('/master', masterController.updateMaster);
 
 router.delete('/master/:id', masterController.deleteMaster);
 

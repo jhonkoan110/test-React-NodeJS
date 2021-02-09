@@ -57,6 +57,7 @@
 
     opacity: 0;
     visibility: hidden;
+    transition: opacity 0.2s linear, visibility 0.2s linear;
 }
 
 .dropdown__list__item {

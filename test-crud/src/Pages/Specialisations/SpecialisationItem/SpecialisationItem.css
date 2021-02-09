@@ -17,3 +17,9 @@
 .specialisations__item__name:focus {
     outline: 2px solid black;
 }
+
+.specialisations__item__error {
+    margin-top: 1rem;
+    padding: 1rem 0;
+    font-size: 1.2rem;
+}
