@@ -1,4 +1,5 @@
 const Router = require('express');
+// import { Router } from 'express';
 const router = new Router();
 const specialisationController = require('../controller/specialisation.controller');
 

@@ -12,7 +12,8 @@ import { getSpecialisations } from './specialisations';
 // Запрос на сервер + обработка ошибки
 const fetchData = (dispatch: any, url: string, requestParams: any = null) => {
     return fetch(url, requestParams).then((response) => {
-        if (!response.ok) {
+        if (response.status !== 200) {
+            dispatch(mastersAreLoading(false));
             throw Error(response.statusText);
         }
         dispatch(mastersAreLoading(false));
@@ -20,23 +21,29 @@ const fetchData = (dispatch: any, url: string, requestParams: any = null) => {
     });
 };
 
-// Получить всех мастеров
 export const getMasters = () => (dispatch: any) => {
-    dispatch(mastersAreLoading(true));
-    dispatch(getSpecialisations());
-
-    fetchData(dispatch, `http://localhost:8080/api/master`)
-        .then((res) => res.json())
-        .then((masters) => {
-            const mastersWithFlags: Array<IMaster> = masters.map((item: IMaster) => {
-                item = { ...item, isReadonly: true };
-                return item;
-            });
-
-            dispatch(setMasters(mastersWithFlags));
-        })
-        .catch(() => dispatch(mastersHasErrored(true)));
+    fetch('/api/master')
+        .then((res) => res.json)
+        .then((masters) => console.log(masters));
 };
+
+// // Получить всех мастеров
+// export const getMasters = () => (dispatch: any) => {
+//     dispatch(mastersAreLoading(true));
+//     dispatch(getSpecialisations());
+
+//     fetchData(dispatch, `/master`)
+//         .then((res) => res.json())
+//         .then((masters) => {
+//             const mastersWithFlags: Array<IMaster> = masters.map((item: IMaster) => {
+//                 item = { ...item, isReadonly: true };
+//                 return item;
+//             });
+
+//             dispatch(setMasters(mastersWithFlags));
+//         })
+//         .catch(() => dispatch(mastersHasErrored(true)));
+// };
 
 // Удалить мастера по id
 export const deleteMasterFetch = (id: number) => (dispatch: any) => {

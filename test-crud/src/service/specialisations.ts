@@ -11,7 +11,8 @@ import {
 // Запрос на сервер + обработка ошибки
 const fetchData = (dispatch: any, url: string, requestParams: any = null) => {
     return fetch(url, requestParams).then((response) => {
-        if (!response.ok) {
+        if (response.status !== 200) {
+            dispatch(isLoading(false));
             throw Error(response.statusText);
         }
         dispatch(isLoading(false));
@@ -23,7 +24,12 @@ const fetchData = (dispatch: any, url: string, requestParams: any = null) => {
 export const getSpecialisations = () => (dispatch: any) => {
     dispatch(isLoading(true));
 
-    fetchData(dispatch, 'http://localhost:8080/api/specialisation')
+    fetchData(dispatch, '/specialisation', {
+        mode: 'cors',
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+        },
+    })
         .then((response) => response.json())
         .then((specialisations) => {
             const specialisationsWithFlags = specialisations.map((item: ISpecialisation) => {
