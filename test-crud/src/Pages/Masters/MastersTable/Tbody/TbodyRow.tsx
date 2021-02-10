@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { startEditMaster } from '../../../redux/masters/actionCreators';
-import { IMaster } from '../../../redux/masters/reducer';
-import { AppStateType } from '../../../redux/store';
-import { updateMaster } from '../../../service/masters';
-import Dropdown from '../../Dropdown/Dropdown';
-import Input from '../../Input/Input';
+import { startEditMaster } from '../../../../redux/masters/actionCreators';
+import { IMaster } from '../../../../redux/masters/reducer';
+import { AppStateType } from '../../../../redux/store';
+import { updateMaster } from '../../../../service/masters';
+import Dropdown from '../../../../components/Dropdown/Dropdown';
+import Input from '../../../../components/Input/Input';
 
 interface TbodyRowProps {
     item: IMaster;

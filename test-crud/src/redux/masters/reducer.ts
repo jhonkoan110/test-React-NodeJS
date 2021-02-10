@@ -1,4 +1,12 @@
-import { ADD_MASTER, DELETE_MASTER, SET_MASTERS, START_EDIT_MASTER } from './actionTypes';
+import {
+    ADD_MASTER,
+    DELETE_MASTER,
+    SET_MASTERS,
+    START_EDIT_MASTER,
+    MASTERS_ARE_LOADING,
+    MASTERS_HAS_ERRORED,
+    SAVE_UPDATED_MASTER,
+} from './actionTypes';
 export interface IMaster {
     id: number;
     login: string;
@@ -44,6 +52,24 @@ const mastersReducer = (state: InitialStateType = initisalState, action: any): I
             const newMasters = state.masters.map((item) => {
                 if (item.id === action.id) {
                     item.isReadonly = false;
+                }
+                return item;
+            });
+            return { ...state, masters: newMasters };
+        }
+
+        case MASTERS_ARE_LOADING: {
+            return { ...state, isLoading: action.bool };
+        }
+
+        case MASTERS_HAS_ERRORED: {
+            return { ...state, hasErrored: action.bool };
+        }
+
+        case SAVE_UPDATED_MASTER: {
+            const newMasters: Array<IMaster> = state.masters.map((item: IMaster) => {
+                if (item.id === action.newMaster.id) {
+                    item = action.newMaster;
                 }
                 return item;
             });

@@ -1,58 +1,85 @@
 import { IMaster } from './../redux/masters/reducer';
-import { setMasters, addMaster, deleteMaster } from './../redux/masters/actionCreators';
+import {
+    setMasters,
+    addMaster,
+    deleteMaster,
+    mastersAreLoading,
+    mastersHasErrored,
+    saveUpdatedMaster,
+} from './../redux/masters/actionCreators';
 import { getSpecialisations } from './specialisations';
+
+// Запрос на сервер + обработка ошибки
+const fetchData = (dispatch: any, url: string, requestParams: any = null) => {
+    return fetch(url, requestParams).then((response) => {
+        if (!response.ok) {
+            throw Error(response.statusText);
+        }
+        dispatch(mastersAreLoading(false));
+        return response;
+    });
+};
 
 // Получить всех мастеров
 export const getMasters = () => (dispatch: any) => {
+    dispatch(mastersAreLoading(true));
     dispatch(getSpecialisations());
-    fetch(`http://localhost:8080/api/master`)
+
+    fetchData(dispatch, `http://localhost:8080/api/master`)
         .then((res) => res.json())
         .then((masters) => {
-            // dispatch(setMasters(masters))
             const mastersWithFlags: Array<IMaster> = masters.map((item: IMaster) => {
                 item = { ...item, isReadonly: true };
                 return item;
             });
 
             dispatch(setMasters(mastersWithFlags));
-        });
+        })
+        .catch(() => dispatch(mastersHasErrored(true)));
 };
 
 // Удалить мастера по id
 export const deleteMasterFetch = (id: number) => (dispatch: any) => {
-    fetch(`http://localhost:8080/api/master/${id}`, {
+    fetchData(dispatch, `http://localhost:8080/api/master/${id}`, {
         method: 'DELETE',
-    }).then(() => {
-        dispatch(deleteMaster(id));
-        dispatch(getMasters());
-    });
+    })
+        .then(() => {
+            dispatch(deleteMaster(id));
+            dispatch(getMasters());
+        })
+        .catch(() => dispatch(mastersHasErrored(true)));
 };
 
 // Добавить нового мастера
 export const createMaster = (newMaster: IMaster) => (dispatch: any) => {
-    fetch(`http://localhost:8080/api/master`, {
+    fetchData(dispatch, `http://localhost:8080/api/master`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(newMaster),
-    }).then(() => {
-        dispatch(addMaster(newMaster));
-        dispatch(getMasters());
-    });
+    })
+        .then(() => {
+            dispatch(addMaster(newMaster));
+            dispatch(getMasters());
+        })
+        .catch(() => dispatch(mastersHasErrored(true)));
 };
 
 // Обновить мастера по id
 export const updateMaster = (updatedMaster: IMaster) => (dispatch: any) => {
-    console.log(updatedMaster);
+    dispatch(mastersAreLoading(true));
 
-    fetch(`http://localhost:8080/api/master`, {
+    fetchData(dispatch, `http://localhost:8080/api/master`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(updatedMaster),
-    }).then(() => {
-        dispatch(getMasters());
-    });
+    })
+        .then(() => {
+            dispatch(saveUpdatedMaster(updatedMaster));
+            dispatch(getMasters());
+        })
+        .catch(() => dispatch(mastersHasErrored(true)));
 };

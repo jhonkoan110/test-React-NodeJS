@@ -8,4 +8,48 @@
 .header__inner {
     width: 1400px;
     margin: 0 auto;
+
+    display: flex;
+    align-items: center;
+}
+
+.header h2 {
+    margin-right: 5rem;
+}
+
+.pages {
+    display: flex;
+    display: flex;
+
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.pages a {
+    text-decoration: none;
+    color: #000;
+}
+
+.masters-page {
+    margin-right: 1rem;
+}
+
+.pages a.active {
+    color: #d00;
+}
+.item__buttons {
+    border: 0;
+    outline: 0;
+    background-color: #fff;
+    font-size: 1.2rem;
+    transform: translateY(4px);
+    cursor: pointer;
+}
+
+.item__buttons:hover {
+    color: #d00;
+}
+
+.item__buttons:last-child {
+    margin-left: 1rem;
 }

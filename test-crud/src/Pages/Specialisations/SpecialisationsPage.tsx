@@ -9,15 +9,19 @@ import {
     getSpecialisations,
 } from '../../service/specialisations';
 import SpecialisationItem from './SpecialisationItem/SpecialisationItem';
-import Modal from '../../components/Modal/Modal';
 import './SpecialisationsPage.css';
+import Loader from '../../components/Loader/Loader';
+import Error from '../../components/Error/Error';
+import SpecialisationModal from './SpecialisationModal/SpecialisationModal';
 
 const SpecialisationsPage: React.FC = () => {
     const dispatch = useDispatch();
     const [isActiveModal, setIsActiveModal] = useState(false);
     const [specialisationName, setSpecialisationName] = useState('');
     const currentId = useSelector((state: AppStateType) => state.specialisationList.currentId);
-    const isLoading = useSelector((state: AppStateType) => state.specialisationList.isLoading);
+    const { isLoading, hasErrored } = useSelector(
+        (state: AppStateType) => state.specialisationList,
+    );
 
     const specialisations: Array<ISpecialisation> = useSelector(
         (state: AppStateType) => state.specialisationList.specialisations,
@@ -59,6 +63,14 @@ const SpecialisationsPage: React.FC = () => {
         dispatch(deleteSpecialisation(id));
     };
 
+    if (isLoading) {
+        return <Loader />;
+    }
+
+    if (hasErrored) {
+        return <Error />;
+    }
+
     return (
         <Block>
             <div className="specialisations__header">
@@ -68,44 +80,26 @@ const SpecialisationsPage: React.FC = () => {
                 </button>
 
                 {isActiveModal && (
-                    <Modal header="Добавить специализацию" onCloseModalClick={closeModalHandler}>
-                        <input
-                            className="modal__content__input"
-                            type="text"
-                            placeholder="Введите имя специализации"
-                            value={specialisationName}
-                            onChange={changeModalInputHandler}
-                        />
-
-                        <div className="modal__content__actions">
-                            <button
-                                className="modal__content__actions__buttons"
-                                onClick={addSpecialisationClickHandler}>
-                                Добавить
-                            </button>
-                            <button
-                                className="modal__content__actions__buttons"
-                                onClick={closeModalHandler}>
-                                Закрыть
-                            </button>
-                        </div>
-                    </Modal>
+                    <SpecialisationModal
+                        specialisationName={specialisationName}
+                        closeModalHandler={closeModalHandler}
+                        onChangeModalInput={changeModalInputHandler}
+                        onAddSpecialisationClick={addSpecialisationClickHandler}
+                    />
                 )}
             </div>
-            {isLoading && <p className="specialisations__loader">Загрузка...</p>}
-            {!isLoading && (
-                <div className="specialisations__body">
-                    {specialisations.map((item: ISpecialisation) => {
-                        return (
-                            <SpecialisationItem
-                                key={item.id}
-                                item={item}
-                                onDeleteClick={deleteClickHandler}
-                            />
-                        );
-                    })}
-                </div>
-            )}
+
+            <div className="specialisations__body">
+                {specialisations.map((item: ISpecialisation) => {
+                    return (
+                        <SpecialisationItem
+                            key={item.id}
+                            item={item}
+                            onDeleteClick={deleteClickHandler}
+                        />
+                    );
+                })}
+            </div>
         </Block>
     );
 };

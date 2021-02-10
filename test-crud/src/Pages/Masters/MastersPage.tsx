@@ -1,15 +1,17 @@
+import { Pagination } from '@material-ui/lab';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Block from '../../components/Block/Block';
-import Dropdown from '../../components/Dropdown/Dropdown';
-import Modal from '../../components/Modal/Modal';
-import Table from '../../components/Table/Table';
+import Error from '../../components/Error/Error';
+import Loader from '../../components/Loader/Loader';
 import { IMaster } from '../../redux/masters/reducer';
 import { AppStateType } from '../../redux/store';
 import { createMaster, getMasters } from '../../service/masters';
+import MastersModal from './MastersModal/MastersModal';
 import './MastersPage.css';
+import MastersTable from './MastersTable/MastersTable';
 
-const MastersPage = () => {
+const MastersPage: React.FC = () => {
     const [isActiveModal, setIsActiveModal] = useState(false);
     const dispatch = useDispatch();
     const [master, setMaster] = useState({
@@ -21,9 +23,24 @@ const MastersPage = () => {
     });
     const currentId = useSelector((state: AppStateType) => state.masterList.currentId);
     const [selectedSpec, setSelectedSpec] = useState('');
+    const masters = useSelector((state: AppStateType) => state.masterList.masters);
+    const { isLoading, hasErrored } = useSelector((state: AppStateType) => state.masterList);
     const specialisations = useSelector(
         (state: AppStateType) => state.specialisationList.specialisations,
     );
+
+    // Пагинация
+    const [currentPage, setCurrentPage] = useState(1);
+    const mastersPerPage: number = 5;
+
+    const indexOfLastMaster: number = currentPage * mastersPerPage;
+    const indexOfFirstMaster: number = indexOfLastMaster - mastersPerPage;
+    const currentMasters: Array<IMaster> = masters.slice(indexOfFirstMaster, indexOfLastMaster);
+    const mastersCount = Math.ceil(masters.length / mastersPerPage);
+
+    const onPageNumberClickHandler = (e: any, pageNumber: any) => {
+        setCurrentPage(pageNumber);
+    };
 
     useEffect(() => {
         dispatch(getMasters());
@@ -37,6 +54,16 @@ const MastersPage = () => {
         });
     };
 
+    const clearMaster = () => {
+        setMaster({
+            login: '',
+            firstname: '',
+            lastname: '',
+            middlename: '',
+            specialisation_id: 0,
+        });
+    };
+
     // Открыть модальное окно
     const openModalClickHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         setIsActiveModal(true);
@@ -45,6 +72,7 @@ const MastersPage = () => {
     // Закрыть модальное окно
     const closeModalHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         setIsActiveModal(false);
+        clearMaster();
     };
 
     // Выбрать специализацию
@@ -69,10 +97,18 @@ const MastersPage = () => {
             isReadonly: true,
         };
 
-        console.log(newMaster);
+        clearMaster();
 
         dispatch(createMaster(newMaster));
     };
+
+    if (isLoading) {
+        return <Loader />;
+    }
+
+    if (hasErrored) {
+        return <Error />;
+    }
 
     return (
         <Block>
@@ -84,61 +120,26 @@ const MastersPage = () => {
             </div>
 
             {isActiveModal && (
-                <Modal header="мастера" onCloseModalClick={closeModalHandler}>
-                    <input
-                        id="login"
-                        className="modal__content__input"
-                        type="text"
-                        placeholder="Введите логин мастера"
-                        value={master.login}
-                        onChange={changeHandler}
-                    />
-                    <input
-                        id="firstname"
-                        className="modal__content__input"
-                        type="text"
-                        placeholder="Введите имя мастера"
-                        value={master.firstname}
-                        onChange={changeHandler}
-                    />
-                    <input
-                        id="lastname"
-                        className="modal__content__input"
-                        type="text"
-                        placeholder="Введите фамилию мастера"
-                        value={master.lastname}
-                        onChange={changeHandler}
-                    />
-                    <input
-                        id="middlename"
-                        className="modal__content__input"
-                        type="text"
-                        placeholder="Введите отчество мастера"
-                        value={master.middlename}
-                        onChange={changeHandler}
-                    />
-                    <Dropdown
-                        selectedSpec={selectedSpec}
-                        specialisations={specialisations}
-                        onSpecClick={selectSpecialisationClickHandler}
-                    />
-
-                    <div className="modal__content__actions">
-                        <button
-                            className="modal__content__actions__buttons"
-                            onClick={addMasterClickHandler}>
-                            Добавить
-                        </button>
-                        <button
-                            className="modal__content__actions__buttons"
-                            onClick={closeModalHandler}>
-                            Закрыть
-                        </button>
-                    </div>
-                </Modal>
+                <MastersModal
+                    master={master}
+                    selectedSpec={selectedSpec}
+                    specialisations={specialisations}
+                    onCloseModal={closeModalHandler}
+                    changeHandler={changeHandler}
+                    onDropdownSpecClick={selectSpecialisationClickHandler}
+                    onAddMasterClick={addMasterClickHandler}
+                />
             )}
+
             <div className="masters__body">
-                <Table />
+                <MastersTable currentMasters={currentMasters} />
+                <Pagination
+                    page={currentPage}
+                    color="primary"
+                    count={mastersCount}
+                    shape="rounded"
+                    onChange={onPageNumberClickHandler}
+                />
             </div>
         </Block>
     );

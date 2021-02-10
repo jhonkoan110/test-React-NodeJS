@@ -1,13 +1,14 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { IMaster } from '../../../redux/masters/reducer';
-import { AppStateType } from '../../../redux/store';
-import { deleteMasterFetch } from '../../../service/masters';
+import { useDispatch } from 'react-redux';
+import { IMaster } from '../../../../redux/masters/reducer';
+import { deleteMasterFetch } from '../../../../service/masters';
 import './Tbody.css';
 import TbodyRow from './TbodyRow';
 
-const Tbody: React.FC = () => {
-    const masters: Array<IMaster> = useSelector((state: AppStateType) => state.masterList.masters);
+interface TbodyProps {
+    currentMasters: Array<IMaster>;
+}
+
+const Tbody: React.FC<TbodyProps> = ({ currentMasters }) => {
     const dispatch = useDispatch();
 
     // Удалить мастера по id
@@ -17,7 +18,7 @@ const Tbody: React.FC = () => {
 
     return (
         <tbody className="tbody">
-            {masters.map((item: IMaster) => {
+            {currentMasters.map((item: IMaster) => {
                 return <TbodyRow key={item.id} item={item} onDeleteClick={deleteMasterHandler} />;
             })}
         </tbody>
