@@ -1,15 +1,15 @@
-const cors = require('cors');
-const express = require('express');
-const specialisationRouter = require('./routes/specialisation.routes');
-const masterRouter = require('./routes/master.routes');
+import cors from 'cors';
+import express from 'express';
+import masterRouter from './controller/master.controller';
+import specialisationRouter from './controller/specialisation.controller';
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3005;
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
-app.use('/api', specialisationRouter);
-app.use('/api', masterRouter);
+app.use('/api/specialisation', specialisationRouter);
+app.use('/api/master', masterRouter);
 
 app.listen(PORT, () => console.log(`server started on port ${PORT}`));

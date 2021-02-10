@@ -21,33 +21,35 @@ const fetchData = (dispatch: any, url: string, requestParams: any = null) => {
     });
 };
 
-export const getMasters = () => (dispatch: any) => {
-    fetch('/api/master')
-        .then((res) => res.json)
-        .then((masters) => console.log(masters));
-};
-
-// // Получить всех мастеров
 // export const getMasters = () => (dispatch: any) => {
-//     dispatch(mastersAreLoading(true));
-//     dispatch(getSpecialisations());
+//     console.log('test');
 
-//     fetchData(dispatch, `/master`)
+//     fetch('/api/master')
 //         .then((res) => res.json())
-//         .then((masters) => {
-//             const mastersWithFlags: Array<IMaster> = masters.map((item: IMaster) => {
-//                 item = { ...item, isReadonly: true };
-//                 return item;
-//             });
-
-//             dispatch(setMasters(mastersWithFlags));
-//         })
-//         .catch(() => dispatch(mastersHasErrored(true)));
+//         .then((masters) => console.log(masters));
 // };
+
+// Получить всех мастеров
+export const getMasters = () => (dispatch: any) => {
+    dispatch(mastersAreLoading(true));
+    dispatch(getSpecialisations());
+
+    fetchData(dispatch, `/api/master`)
+        .then((res) => res.json())
+        .then((masters) => {
+            const mastersWithFlags: Array<IMaster> = masters.map((item: IMaster) => {
+                item = { ...item, isReadonly: true };
+                return item;
+            });
+
+            dispatch(setMasters(mastersWithFlags));
+        })
+        .catch(() => dispatch(mastersHasErrored(true)));
+};
 
 // Удалить мастера по id
 export const deleteMasterFetch = (id: number) => (dispatch: any) => {
-    fetchData(dispatch, `http://localhost:8080/api/master/${id}`, {
+    fetchData(dispatch, `/api/master/${id}`, {
         method: 'DELETE',
     })
         .then(() => {
@@ -59,7 +61,7 @@ export const deleteMasterFetch = (id: number) => (dispatch: any) => {
 
 // Добавить нового мастера
 export const createMaster = (newMaster: IMaster) => (dispatch: any) => {
-    fetchData(dispatch, `http://localhost:8080/api/master`, {
+    fetchData(dispatch, `/api/master`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -77,7 +79,7 @@ export const createMaster = (newMaster: IMaster) => (dispatch: any) => {
 export const updateMaster = (updatedMaster: IMaster) => (dispatch: any) => {
     dispatch(mastersAreLoading(true));
 
-    fetchData(dispatch, `http://localhost:8080/api/master`, {
+    fetchData(dispatch, `/api/master`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

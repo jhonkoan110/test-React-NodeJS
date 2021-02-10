@@ -24,7 +24,7 @@ const fetchData = (dispatch: any, url: string, requestParams: any = null) => {
 export const getSpecialisations = () => (dispatch: any) => {
     dispatch(isLoading(true));
 
-    fetchData(dispatch, '/specialisation', {
+    fetchData(dispatch, '/api/specialisation', {
         mode: 'cors',
         headers: {
             'Access-Control-Allow-Origin': '*',
@@ -45,7 +45,7 @@ export const getSpecialisations = () => (dispatch: any) => {
 export const createSpecialisation = (newSpecialisation: ISpecialisation) => (dispatch: any) => {
     dispatch(isLoading(true));
 
-    fetchData(dispatch, 'http://localhost:8080/api/specialisation', {
+    fetchData(dispatch, '/api/specialisation', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ export const createSpecialisation = (newSpecialisation: ISpecialisation) => (dis
 export const deleteSpecialisation = (id: number) => (dispatch: any) => {
     dispatch(isLoading(true));
 
-    fetchData(dispatch, `http://localhost:8080/api/specialisation/${id}`, {
+    fetchData(dispatch, `/api/specialisation/${id}`, {
         method: 'DELETE',
     })
         .then(() => {
@@ -78,7 +78,7 @@ export const deleteSpecialisation = (id: number) => (dispatch: any) => {
 
 // Обновить специализацию по id
 export const updateSpecialisation = (newItem: ISpecialisation, id: number) => (dispatch: any) => {
-    fetchData(dispatch, `http://localhost:8080/api/specialisation`, {
+    fetchData(dispatch, `/api/specialisation`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

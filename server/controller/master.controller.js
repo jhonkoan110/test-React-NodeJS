@@ -1,51 +1,22 @@
-const db = require('../db');
+import Router from 'express';
+import {
+    createMaster2,
+    getMasters2,
+    getMastersBySpecialisation2,
+    updateMaster2,
+    deleteMaster2,
+} from '../service/master.service';
 
-class MasterController {
-    async createMaster(req, res) {
-        const { login, firstname, lastname, middlename, specialisation_id } = req.body;
-        const newMaster = await db.query(
-            `INSERT INTO master (login, firstname, lastname, middlename, specialisation_id) values ($1, $2, $3, $4, $5) RETURNING *`,
-            [login, firstname, lastname, middlename, specialisation_id],
-        );
-        res.json(newMaster.rows[0]);
-    }
+const masterRouter = new Router();
 
-    async getMasters(req, res) {
-        const masters = await db.query(`select master.id, master.login, master.firstName, master.lastName, master.middleName, master.specialisation_id, specialisation.name
-        FROM master
-        INNER JOIN specialisation
-        ON master.specialisation_id=specialisation.id`);
-        res.json(masters.rows);
-    }
+masterRouter.post('/', createMaster2);
 
-    async getOneMaster(req, res) {
-        const id = req.params.id;
-        const specialisation = await db.query(`SELECT * FROM master where id = $1`, [id]);
-        res.json(specialisation.rows[0]);
-    }
+masterRouter.get('/', getMasters2);
 
-    async getMastersBySpecialisation(req, res) {
-        const id = req.query.id;
-        const master = await db.query(`SELECT * FROM master where specialisation_id = $1`, [id]);
-        res.json(master.rows);
-    }
+masterRouter.get('/', getMastersBySpecialisation2);
 
-    async updateMaster(req, res) {
-        const { id, login, firstname, lastname, middlename, specialisation_id } = req.body;
-        const master = await db.query(
-            `UPDATE master SET login = $1, firstname = $2, lastname = $3, middlename = $4, specialisation_id = $5 where id = $6 RETURNING *`,
-            [login, firstname, lastname, middlename, specialisation_id, id],
-        );
-        res.json(master.rows[0]);
-    }
+masterRouter.put('/', updateMaster2);
 
-    async deleteMaster(req, res) {
-        try {
-            const id = req.params.id;
-            const master = await db.query(`DELETE FROM master where id  = $1`, [id]);
-            res.json(master.rows[0]);
-        } catch (error) {}
-    }
-}
+masterRouter.delete('/:id', deleteMaster2);
 
-module.exports = new MasterController();
+export default masterRouter;
