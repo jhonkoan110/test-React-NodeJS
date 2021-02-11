@@ -18,6 +18,11 @@ const Header: React.FC = () => {
                             Специализации
                         </NavLink>
                     </div>
+                    <div className="specialisations-page">
+                        <NavLink to="/profile" activeClassName="active">
+                            Профиль
+                        </NavLink>
+                    </div>
                 </div>
             </div>
         </header>

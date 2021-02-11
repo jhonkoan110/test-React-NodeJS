@@ -1,4 +1,5 @@
 import * as masterRepository from '../repositories/master.repository';
+import { getOneSpecialisation } from './specialisation.service';
 
 // Получить всех мастеров
 export const getMasters = async () => {
@@ -9,7 +10,8 @@ export const getMasters = async () => {
 // Получить одного мастера по Id
 export const getOneMaster = async (id) => {
     const master = await masterRepository.getOneMaster(id);
-    return master;
+    const specialisation = await getOneSpecialisation(master.specialisation_id);
+    return { ...master, name: specialisation.name };
 };
 
 // Получить мастеров по id специализации

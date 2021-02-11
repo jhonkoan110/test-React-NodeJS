@@ -6,6 +6,7 @@ import {
     MASTERS_ARE_LOADING,
     MASTERS_HAS_ERRORED,
     SAVE_UPDATED_MASTER,
+    SET_CURRENT_MASTER,
 } from './actionTypes';
 import { IMaster } from './reducer';
 
@@ -22,3 +23,5 @@ export const mastersAreLoading = (bool: boolean) => ({ type: MASTERS_ARE_LOADING
 export const mastersHasErrored = (bool: boolean) => ({ type: MASTERS_HAS_ERRORED, bool });
 
 export const saveUpdatedMaster = (newMaster: IMaster) => ({ type: SAVE_UPDATED_MASTER, newMaster });
+
+export const setCurrentMaster = (master: IMaster) => ({ type: SET_CURRENT_MASTER, master });

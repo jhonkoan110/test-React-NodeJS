@@ -1,0 +1,25 @@
+.profile__header {
+    padding: 1rem 0;
+    border-bottom: 1px solid #ececec;
+}
+
+fieldset {
+    border: 1px solid #ececec;
+    padding: 0 0.5rem 0.5rem;
+}
+
+legend {
+    color: #939cb0;
+    padding: 4px;
+}
+
+fieldset input {
+    width: 100%;
+    padding: 0.5rem 0;
+
+    font-size: 1.2rem;
+    font-family: 'YS Text', Helvetica Neue, Arial, sans-serif;
+
+    border: 0;
+    outline: 0;
+}

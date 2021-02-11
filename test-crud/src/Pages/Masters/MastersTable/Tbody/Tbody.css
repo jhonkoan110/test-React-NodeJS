@@ -3,6 +3,12 @@
     width: 16%;
 }
 
+.tbody__row {
+    background-color: red;
+}
+.tbody__row:hover {
+    background-color: blue;
+}
 .tbody__row__item {
     margin-top: 0.5rem;
     width: 80%;
@@ -10,4 +16,8 @@
     padding: 0.5rem;
     border: 0;
     outline: 0;
+}
+
+.tbody a {
+    display: block;
 }

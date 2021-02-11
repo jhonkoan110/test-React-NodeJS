@@ -6,6 +6,7 @@ import {
     MASTERS_ARE_LOADING,
     MASTERS_HAS_ERRORED,
     SAVE_UPDATED_MASTER,
+    SET_CURRENT_MASTER,
 } from './actionTypes';
 export interface IMaster {
     id: number;
@@ -23,6 +24,7 @@ const initisalState = {
     hasErrored: false,
     masters: [] as Array<IMaster>,
     currentId: 0,
+    currentMaster: null,
 };
 
 type InitialStateType = typeof initisalState;
@@ -74,6 +76,10 @@ const mastersReducer = (state: InitialStateType = initisalState, action: any): I
                 return item;
             });
             return { ...state, masters: newMasters };
+        }
+
+        case SET_CURRENT_MASTER: {
+            return { ...state, currentMaster: action.master };
         }
 
         default:

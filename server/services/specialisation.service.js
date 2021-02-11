@@ -1,4 +1,5 @@
 import * as specialisationRepository from '../repositories/specialisation.repository';
+import { getMastersBySpecialisation } from './master.service';
 
 // Получить специализации
 export const getSpecialisations = async () => {
@@ -6,10 +7,13 @@ export const getSpecialisations = async () => {
     return specialisations;
 };
 
-// Получить одну специлизацию по id
+// Получить одну специализацию по id
 export const getOneSpecialisation = async (id) => {
-    const specialisation = await specialisationRepository.getOneSpecialisation(id);
-    return specialisation;
+    const [specialisation, masters] = await Promise.all([
+        specialisationRepository.getOneSpecialisation(id),
+        getMastersBySpecialisation(id),
+    ]);
+    return { ...specialisation, masters };
 };
 
 // Обновить специализацию
