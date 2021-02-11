@@ -1,44 +1,35 @@
-import {
-    createSpecialisation,
-    deleteSpecialisation,
-    getOneSpecialisation,
-    getSpecialisations,
-    updateSpecialisation,
-} from '../repositories/specialisation.repository';
+import * as specialisationRepository from '../repositories/specialisation.repository';
 
-export const createSpecialisation2 = async (req, res) => {
-    const { name } = req.body;
-    const newSpecialisation = await createSpecialisation(name);
-    res.json(newSpecialisation.rows[0]);
+// Получить специализации
+export const getSpecialisations = async () => {
+    const specialisations = await specialisationRepository.getSpecialisations();
+    return specialisations;
 };
 
-export const getSpecialisations2 = async (req, res) => {
-    const specialisations = await getSpecialisations();
-    res.json(specialisations.rows);
+// Получить одну специлизацию по id
+export const getOneSpecialisation = async (id) => {
+    const specialisation = await specialisationRepository.getOneSpecialisation(id);
+    return specialisation;
 };
 
-export const getOneSpecialisation2 = async (req, res) => {
-    const id = req.params.id;
-    const specialisation = await getOneSpecialisation(id);
-    res.json(specialisation.rows[0]);
+// Обновить специализацию
+export const updateSpecialisation = async (id, name) => {
+    const specialisation = await specialisationRepository.updateSpecialisation(id, name);
+    return specialisation;
 };
 
-export const updateSpecialisation2 = async (req, res) => {
-    const { id, name } = req.body;
-    const specialisation = await updateSpecialisation(id, name);
-    res.json(specialisation.rows[0]);
+// Добавить специализацию
+export const createSpecialisation = async (name) => {
+    const newSpecialisation = await specialisationRepository.createSpecialisation(name);
+    return newSpecialisation;
 };
 
-export const deleteSpecialisation2 = async (req, res) => {
-    const id = req.params.id;
-
-    const result = await deleteSpecialisation(id);
+// Удалить специализацию
+export const deleteSpecialisation = async (id) => {
+    const result = await specialisationRepository.deleteSpecialisation(id);
     if (result === 400) {
-        console.log(res.status(400));
-        res.status(400).json({
-            title: `У этой специализации ещё есть мастер(-а)`,
-        });
+        return 400;
     } else {
-        res.json(result.rows[0]);
+        return result;
     }
 };

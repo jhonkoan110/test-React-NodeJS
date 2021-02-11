@@ -7,14 +7,14 @@ export const getMasters = async () => {
     INNER JOIN specialisation
     ON master.specialisation_id=specialisation.id`);
 
-    return masters;
+    return masters.rows;
 };
 
 // Получить одного мастера
 export const getOneMaster = async (id) => {
     const master = await db.query(`SELECT * FROM master where id = $1`, [id]);
 
-    return master;
+    return master.rows[0];
 };
 
 // Создать мастера
@@ -26,32 +26,32 @@ export const createMaster = async (requestBody) => {
         [login, firstname, lastname, middlename, specialisation_id],
     );
 
-    return newMaster;
+    return newMaster.rows[0];
 };
 
 // Получить мастеров по специализации
 export const getMastersBySpecialisation = async (specialisation_id) => {
-    const master = await db.query(`SELECT * FROM master where specialisation_id = $1`, [
+    const masters = await db.query(`SELECT * FROM master where specialisation_id = $1`, [
         specialisation_id,
     ]);
-    return master;
+    return masters.rows;
 };
 
 // Обновить мастера
 export const updateMaster = async (requestBody) => {
     const { id, login, firstname, lastname, middlename, specialisation_id } = requestBody;
 
-    const master = await db.query(
+    const updatedMaster = await db.query(
         `UPDATE master SET login = $1, firstname = $2, lastname = $3, middlename = $4, specialisation_id = $5 where id = $6 RETURNING *`,
         [login, firstname, lastname, middlename, specialisation_id, id],
     );
 
-    return master;
+    return updatedMaster.rows[0];
 };
 
 // Удалить мастера
 export const deleteMaster = async (id) => {
     const master = await db.query(`DELETE FROM master where id = $1`, [id]);
 
-    return master;
+    return master.rows[0];
 };

@@ -1,22 +1,46 @@
 import { Router } from 'express';
-import {
-    createSpecialisation2,
-    deleteSpecialisation2,
-    getOneSpecialisation2,
-    getSpecialisations2,
-    updateSpecialisation2,
-} from '../services/specialisation.service';
+import * as specialisationService from '../services/specialisation.service';
 
 const specialisationRouter = new Router();
 
-specialisationRouter.post('/', createSpecialisation2);
+// Получить специализации
+specialisationRouter.get('/', async (req, res) => {
+    const specialisations = await specialisationService.getSpecialisations();
+    res.status(200).json(specialisations);
+});
 
-specialisationRouter.get('/', getSpecialisations2);
+// Получить одну специализацию по id
+specialisationRouter.get('/:id', async (req, res) => {
+    const id = req.params.id;
+    const specialisation = await specialisationService.getOneSpecialisation(id);
+    res.status(200).json(specialisation);
+});
 
-specialisationRouter.get('/:id', getOneSpecialisation2);
+// Добавить специализацию
+specialisationRouter.post('/', async (req, res) => {
+    const { name } = req.body;
+    const newSpecialisation = await specialisationService.createSpecialisation(name);
+    res.status(200).json(newSpecialisation);
+});
 
-specialisationRouter.put('/', updateSpecialisation2);
+// Обновить специализацию
+specialisationRouter.put('/', async (req, res) => {
+    const { id, name } = req.body;
+    const specialisation = specialisationService.updateSpecialisation(id, name);
+    res.status(200).json(specialisation);
+});
 
-specialisationRouter.delete('/:id', deleteSpecialisation2);
+// Удалить специализацию
+specialisationRouter.delete('/:id', async (req, res) => {
+    const id = req.params.id;
+    const result = await specialisationService.deleteSpecialisation(id);
+    if (result === 400) {
+        res.status(400).json({
+            title: `У этой специализации ещё есть мастер(-а)`,
+        });
+    } else {
+        res.status(200).json(result);
+    }
+});
 
 export default specialisationRouter;

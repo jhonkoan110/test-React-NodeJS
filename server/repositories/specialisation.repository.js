@@ -3,13 +3,13 @@ import db from '../db';
 // Получить специализации
 export const getSpecialisations = async () => {
     const specialisations = await db.query(`SELECT * FROM specialisation`);
-    return specialisations;
+    return specialisations.rows;
 };
 
 // Получить одну пециализацию по id
 export const getOneSpecialisation = async (id) => {
     const specialisation = await db.query(`SELECT * FROM specialisation where id = $1`, [id]);
-    return specialisation;
+    return specialisation.rows[0];
 };
 
 // Создать специализацию
@@ -19,7 +19,7 @@ export const createSpecialisation = async (name) => {
         [name],
     );
 
-    return newSpecialisation;
+    return newSpecialisation.rows[0];
 };
 
 // Обновить специализацию
@@ -29,7 +29,7 @@ export const updateSpecialisation = async (id, name) => {
         [name, id],
     );
 
-    return specialisation;
+    return specialisation.rows[0];
 };
 
 // Удалить специализацию
@@ -40,6 +40,6 @@ export const deleteSpecialisation = async (id) => {
         return 400;
     } else {
         const specialisation = await db.query(`DELETE FROM specialisation where id = $1`, [id]);
-        return specialisation;
+        return specialisation.rows[0];
     }
 };

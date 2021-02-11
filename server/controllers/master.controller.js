@@ -1,22 +1,47 @@
 import Router from 'express';
-import {
-    createMaster2,
-    getMasters2,
-    getMastersBySpecialisation2,
-    updateMaster2,
-    deleteMaster2,
-} from '../services/master.service';
+import * as masterService from '../services/master.service';
 
 const masterRouter = new Router();
 
-masterRouter.post('/', createMaster2);
+// Получить всех мастеров
+masterRouter.get('/', async (req, res) => {
+    const masters = await masterService.getMasters();
+    res.status(200).json(masters);
+});
 
-masterRouter.get('/', getMasters2);
+// Получить одного мастера по id
+masterRouter.get('/:id', async (req, res) => {
+    const id = req.params.id;
+    const master = await masterService.getOneMaster(id);
+    res.status(200).json(master);
+});
 
-masterRouter.get('/', getMastersBySpecialisation2);
+// Получить мастеров по id специализации
+masterRouter.get('/:specialisation_id', async (req, res) => {
+    const specialisation_id = req.params.specialisation_id;
+    const masters = await masterService.getMastersBySpecialisation(specialisation_id);
+    req.status(200).json(masters);
+});
 
-masterRouter.put('/', updateMaster2);
+// Добавить мастера
+masterRouter.post('/', async (req, res) => {
+    const requestBody = req.body;
+    const newMaster = await masterService.createMaster(requestBody);
+    res.status(200).json(newMaster);
+});
 
-masterRouter.delete('/:id', deleteMaster2);
+// Обновить мастера
+masterRouter.put('/', async (req, res) => {
+    const requestBody = req.body;
+    const updatedMaster = await masterService.updateMaster(requestBody);
+    res.status(200).json(updatedMaster);
+});
+
+// Удалить мастера
+masterRouter.delete('/:id', async (req, res) => {
+    const id = req.params.id;
+    const master = await masterService.deleteMaster(id);
+    res.status(200).json(master);
+});
 
 export default masterRouter;
