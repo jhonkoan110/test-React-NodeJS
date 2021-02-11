@@ -29,7 +29,7 @@ export const createMaster = async (requestBody) => {
     return newMaster;
 };
 
-//
+// Получить мастеров по специализации
 export const getMastersBySpecialisation = async (specialisation_id) => {
     const master = await db.query(`SELECT * FROM master where specialisation_id = $1`, [
         specialisation_id,

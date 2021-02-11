@@ -6,6 +6,7 @@ import {
     DELETE_SPECIALISATION,
     ADD_SPECIALISATION,
     SAVE_UPDATED_SPECIALISATION,
+    SET_DELETE_ERROR,
 } from './actionTypes';
 export interface ISpecialisation {
     id: number;
@@ -18,6 +19,7 @@ const initialState = {
     hasErrored: false,
     specialisations: [] as Array<ISpecialisation>,
     currentId: 0,
+    deleteError: '',
 };
 
 type InitialStateType = typeof initialState;
@@ -71,6 +73,10 @@ const specialisationsReducer = (state: InitialStateType = initialState, action: 
                     ? action.specialisations[action.specialisations.length - 1].id
                     : 0,
             };
+        }
+
+        case SET_DELETE_ERROR: {
+            return { ...state, deleteError: action.deleteError };
         }
 
         default:

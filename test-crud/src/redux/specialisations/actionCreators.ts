@@ -6,6 +6,7 @@ import {
     DELETE_SPECIALISATION,
     ADD_SPECIALISATION,
     SAVE_UPDATED_SPECIALISATION,
+    SET_DELETE_ERROR,
 } from './actionTypes';
 import { ISpecialisation } from './reducer';
 
@@ -31,3 +32,5 @@ export const saveUpdatedSpecialisation = (newSpec: ISpecialisation) => ({
     type: SAVE_UPDATED_SPECIALISATION,
     newSpec,
 });
+
+export const setDeleteError = (deleteError: string) => ({ type: SET_DELETE_ERROR, deleteError });

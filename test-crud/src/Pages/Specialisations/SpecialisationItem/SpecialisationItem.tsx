@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Modal from '../../../components/Modal/Modal';
-import { hasErrored, startEdit } from '../../../redux/specialisations/actionCreators';
+import {
+    hasErrored,
+    setDeleteError,
+    startEdit,
+} from '../../../redux/specialisations/actionCreators';
 import { ISpecialisation } from '../../../redux/specialisations/reducer';
 import { AppStateType } from '../../../redux/store';
 import { updateSpecialisation } from '../../../service/specialisations';
@@ -16,10 +20,10 @@ const SpecialisationItem: React.FC<SpecialisationItemProps> = ({ item, onDeleteC
     const { id, isReadonly } = item;
     const [name, setName] = useState(item.name);
     const dispatch = useDispatch();
-    const isError = useSelector((state: AppStateType) => state.specialisationList.hasErrored);
+    const deleteError = useSelector((state: AppStateType) => state.specialisationList.deleteError);
 
     const closeModalClickHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        dispatch(hasErrored(false));
+        dispatch(setDeleteError(''));
     };
 
     // Начать редактирование
@@ -50,7 +54,7 @@ const SpecialisationItem: React.FC<SpecialisationItemProps> = ({ item, onDeleteC
                 readOnly={isReadonly}
                 onChange={changeNameHandler}
             />
-            {isError && (
+            {deleteError !== '' && (
                 <Modal header="Невозможно удалить" onCloseModalClick={closeModalClickHandler}>
                     <p className="specialisations__item__error">
                         У этой специализации ещё есть мастер(-а).

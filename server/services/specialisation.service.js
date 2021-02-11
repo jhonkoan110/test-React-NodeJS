@@ -4,7 +4,7 @@ import {
     getOneSpecialisation,
     getSpecialisations,
     updateSpecialisation,
-} from '../repository/specialisation.repository';
+} from '../repositories/specialisation.repository';
 
 export const createSpecialisation2 = async (req, res) => {
     const { name } = req.body;
@@ -34,23 +34,11 @@ export const deleteSpecialisation2 = async (req, res) => {
 
     const result = await deleteSpecialisation(id);
     if (result === 400) {
+        console.log(res.status(400));
         res.status(400).json({
             title: `У этой специализации ещё есть мастер(-а)`,
         });
     } else {
         res.json(result.rows[0]);
     }
-
-    // // Запрашиваются мастера по id специализации
-    // const masters = await db.query(`SELECT * FROM master where specialisation_id = $1`, [id]);
-    // // Если есть хотя бы 1, возвращается ошибка
-    // if (masters.rows.length > 0) {
-    //     res.status(400).json({
-    //         title: `У этой специализации ещё есть мастер(-а)`,
-    //     });
-    //     // Если нет - специализация удаляется
-    // } else {
-    //     const specialisation = await db.query(`DELETE FROM specialisation where id = $1`, [id]);
-    //     res.json(specialisation.rows[0]);
-    // }
 };

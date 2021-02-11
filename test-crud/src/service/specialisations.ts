@@ -6,11 +6,16 @@ import {
     deleteSpecialisations,
     addSpecialisation,
     saveUpdatedSpecialisation,
+    setDeleteError,
 } from './../redux/specialisations/actionCreators';
 
 // Запрос на сервер + обработка ошибки
 const fetchData = (dispatch: any, url: string, requestParams: any = null) => {
-    return fetch(url, requestParams).then((response) => {
+    return fetch(url, requestParams).then((response: any) => {
+        if (response.status === 400) {
+            dispatch(isLoading(false));
+            throw Error('У этой специализации ещё есть мастер(-а).');
+        }
         if (response.status !== 200) {
             dispatch(isLoading(false));
             throw Error(response.statusText);
@@ -62,18 +67,26 @@ export const createSpecialisation = (newSpecialisation: ISpecialisation) => (dis
 
 // Удалить специализацию по id
 export const deleteSpecialisation = (id: number) => (dispatch: any) => {
-    dispatch(isLoading(true));
-
-    fetchData(dispatch, `/api/specialisation/${id}`, {
+    fetch(`/api/specialisation/${id}`, {
         method: 'DELETE',
     })
+        .then((response) => {
+            if (response.status === 400) {
+                const deleteError = response.json();
+                deleteError.then((error) => dispatch(setDeleteError(error.title)));
+            }
+            if (!response.ok && response.status !== 400) {
+                throw Error(response.statusText);
+            }
+
+            dispatch(isLoading(false));
+            return response;
+        })
         .then(() => {
             dispatch(deleteSpecialisations(id));
             dispatch(getSpecialisations());
         })
-        .catch(() => {
-            dispatch(hasErrored(true));
-        });
+        .catch(() => dispatch(hasErrored(true)));
 };
 
 // Обновить специализацию по id

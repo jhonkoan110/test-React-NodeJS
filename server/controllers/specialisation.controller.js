@@ -5,7 +5,7 @@ import {
     getOneSpecialisation2,
     getSpecialisations2,
     updateSpecialisation2,
-} from '../service/specialisation.service';
+} from '../services/specialisation.service';
 
 const specialisationRouter = new Router();
 

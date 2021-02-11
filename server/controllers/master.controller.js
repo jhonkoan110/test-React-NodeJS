@@ -5,7 +5,7 @@ import {
     getMastersBySpecialisation2,
     updateMaster2,
     deleteMaster2,
-} from '../service/master.service';
+} from '../services/master.service';
 
 const masterRouter = new Router();
 

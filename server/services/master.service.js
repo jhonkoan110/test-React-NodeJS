@@ -1,11 +1,11 @@
-const {
+import {
     createMaster,
     getMasters,
     getOneMaster,
     updateMaster,
     deleteMaster,
     getMastersBySpecialisation,
-} = require('../repository/master.repository');
+} from '../repositories/master.repository';
 
 export async function createMaster2(req, res) {
     const newMaster = await createMaster(req.body);
