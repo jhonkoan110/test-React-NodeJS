@@ -56,7 +56,7 @@ export const createSpecialisation = async (name) => {
     }
 };
 
-// Обновить специализацию не работает trycatch
+// Обновить специализацию
 export const updateSpecialisation = async (id, name) => {
     try {
         let specialisation = await db.query(`SELECT * FROM specialisation where id = $1`, [id]);

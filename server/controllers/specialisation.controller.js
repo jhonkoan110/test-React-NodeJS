@@ -53,7 +53,7 @@ specialisationRouter.post('/', async (req, res) => {
 specialisationRouter.put('/', async (req, res) => {
     try {
         const { id, name } = req.body;
-        const specialisation = specialisationService.updateSpecialisation(id, name);
+        const specialisation = await specialisationService.updateSpecialisation(id, name);
 
         res.status(200).json(specialisation);
     } catch (error) {
