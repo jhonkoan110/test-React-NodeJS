@@ -1,6 +1,9 @@
 import { Router } from 'express';
 import * as specialisationService from '../services/specialisation.service';
-import { NotFound, DeleteMasterError } from '../repositories/specialisation.repository';
+import {
+    NotFoundError,
+    DeleteSpecialisationError,
+} from '../repositories/specialisation.repository';
 
 const specialisationRouter = new Router();
 
@@ -21,7 +24,7 @@ specialisationRouter.get('/:id', async (req, res) => {
         const specialisation = await specialisationService.getOneSpecialisation(id);
         res.status(200).json(specialisation);
     } catch (err) {
-        if (err instanceof NotFound) {
+        if (err instanceof NotFoundError) {
             res.status(404).json(err.message);
         } else {
             res.status(500).json(err);
@@ -47,7 +50,7 @@ specialisationRouter.put('/', async (req, res) => {
         const specialisation = specialisationService.updateSpecialisation(id, name);
         res.status(200).json(specialisation);
     } catch (error) {
-        if (error instanceof NotFound) {
+        if (error instanceof NotFoundError) {
             console.log(error.message);
             res.status(404).json(error.message);
         } else {
@@ -64,9 +67,9 @@ specialisationRouter.delete('/:id', async (req, res) => {
         const result = await specialisationService.deleteSpecialisation(id);
         res.status(200).json(result);
     } catch (err) {
-        if (err instanceof NotFound) {
+        if (err instanceof NotFoundError) {
             res.status(404).json(err.message);
-        } else if (err instanceof DeleteMasterError) {
+        } else if (err instanceof DeleteSpecialisationError) {
             res.status(400).json(err.message);
         } else {
             res.status(500).json(err);
