@@ -15,62 +15,47 @@ export const validateMaster = async (master) => {
     };
 
     const { login, firstname, lastname, middlename, specialisation_id } = master;
-    const specialisation = await getOneSpecialisation(specialisation_id);
+
+    // Проверка поля
+    const checkField = (fieldName, field, message, min, max) => {
+        if (field.length === min || field.length > max) {
+            result.error = true;
+            result.validationErrors[fieldName] = message;
+        }
+        console.log(result.validationErrors);
+    };
 
     // Проверка логина
-    if (login.length === 0 || login.length > 30) {
-        result = {
-            ...result,
-            error: true,
-        };
-        result.validationErrors.login = 'Обязательное поле. Не более 30 символов.';
-    }
+    checkField('login', login, 'Обязательное поле. Не более 30 символов.', 0, 30);
 
     // Проверка имени
-    if (firstname.length === 0 || firstname.length > 30) {
-        result = {
-            ...result,
-            error: true,
-        };
-        result.validationErrors.firstname = 'Обязательное поле. Не более 30 символов.';
-    }
+    checkField('firstname', firstname, 'Обязательное поле. Не более 30 символов.', 0, 30);
 
     // Проверка фамилии
-    if (lastname.length === 0 || lastname.length > 30) {
-        result = {
-            ...result,
-            error: true,
-        };
-        result.validationErrors.lastname = 'Обязательное поле. Не более 30 символов.';
-    }
+    checkField('lastname', lastname, 'Обязательное поле. Не более 30 символов.', 0, 30);
 
     // Проверка отчества
-    if (middlename.length > 30) {
-        result = {
-            ...result,
-            error: true,
-        };
-        result.validationErrors.middlename = 'Не более 30 символов.';
-    }
+    checkField('middlename', middlename, 'Не более 30 символов.', null, 30);
 
     // Проверка специализации
-    // try {
-    if (!specialisation) {
-        result = {
-            ...result,
-            error: true,
-        };
-        result.validationErrors.specialisation = 'Такой специализации не существует.';
+    try {
+        const specialisation = await getOneSpecialisation(specialisation_id);
+        if (!specialisation) {
+            result = {
+                ...result,
+                error: true,
+            };
+            result.validationErrors.specialisation = 'Такой специализации не существует.';
+        }
+    } catch (err) {
+        if (err instanceof NotFoundError) {
+            result = {
+                ...result,
+                error: true,
+            };
+            result.validationErrors.specialisation = 'Такой специализации не существует.';
+        }
     }
-    // } catch (err) {
-    //     if (err instanceof NotFoundError) {
-    //         result = {
-    //             ...result,
-    //             error: true,
-    //         };
-    //         result.validationErrors.specialisation = 'Такой специализации не существует.';
-    //     }
-    // }
 
     return result;
 };
