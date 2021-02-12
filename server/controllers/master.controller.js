@@ -45,7 +45,7 @@ masterRouter.get('/', async (req, res) => {
 masterRouter.post('/', async (req, res) => {
     try {
         // Валидация данных
-        const validationResult = validateMaster(req.body);
+        const validationResult = await validateMaster(req.body);
         console.log(validationResult);
         if (validationResult.error === true) {
             res.status(400).json(validationResult);

@@ -2,7 +2,7 @@ import { NotFoundError } from '../repositories/specialisation.repository';
 import { getOneSpecialisation } from './specialisation.service';
 
 // Валидация мастера
-export const validateMaster = (master) => {
+export const validateMaster = async (master) => {
     let result = {
         error: false,
         validationErrors: {
@@ -15,7 +15,7 @@ export const validateMaster = (master) => {
     };
 
     const { login, firstname, lastname, middlename, specialisation_id } = master;
-    const specialisation = getOneSpecialisation(specialisation_id);
+    const specialisation = await getOneSpecialisation(specialisation_id);
 
     // Проверка логина
     if (login.length === 0 || login.length > 30) {
@@ -54,29 +54,29 @@ export const validateMaster = (master) => {
     }
 
     // Проверка специализации
-    try {
-        if (!specialisation) {
-            result = {
-                ...result,
-                error: true,
-            };
-            result.validationErrors.specialisation = 'Такой специализации не существует.';
-        }
-    } catch (err) {
-        if (err instanceof NotFoundError) {
-            result = {
-                ...result,
-                error: true,
-            };
-            result.validationErrors.specialisation = 'Такой специализации не существует.';
-        }
+    // try {
+    if (!specialisation) {
+        result = {
+            ...result,
+            error: true,
+        };
+        result.validationErrors.specialisation = 'Такой специализации не существует.';
     }
+    // } catch (err) {
+    //     if (err instanceof NotFoundError) {
+    //         result = {
+    //             ...result,
+    //             error: true,
+    //         };
+    //         result.validationErrors.specialisation = 'Такой специализации не существует.';
+    //     }
+    // }
 
     return result;
 };
 
 // Валидация специализации
-export const validateSpecialisation = (specialisation) => {
+export const validateSpecialisation = async (specialisation) => {
     const { name } = specialisation;
     let result = { error: false };
 

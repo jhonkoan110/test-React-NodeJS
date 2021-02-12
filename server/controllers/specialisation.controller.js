@@ -37,7 +37,7 @@ specialisationRouter.get('/:id', async (req, res) => {
 specialisationRouter.post('/', async (req, res) => {
     try {
         // Валидация данных
-        const validationResult = validateSpecialisation(req.body);
+        const validationResult = await validateSpecialisation(req.body);
         if (validationResult.error === true) {
             res.status(400).json(validationResult.validationErrors);
         } else {
