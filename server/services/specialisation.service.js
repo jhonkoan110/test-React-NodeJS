@@ -23,7 +23,8 @@ export const updateSpecialisation = async (id, name) => {
 };
 
 // Добавить специализацию
-export const createSpecialisation = async (name) => {
+export const createSpecialisation = async (requestBody) => {
+    const { name } = requestBody;
     const newSpecialisation = await specialisationRepository.createSpecialisation(name);
     return newSpecialisation;
 };

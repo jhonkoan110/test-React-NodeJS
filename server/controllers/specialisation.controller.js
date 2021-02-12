@@ -4,6 +4,7 @@ import {
     NotFoundError,
     DeleteSpecialisationError,
 } from '../repositories/specialisation.repository';
+import { validateSpecialisation } from '../services/validate.service';
 
 const specialisationRouter = new Router();
 
@@ -35,9 +36,14 @@ specialisationRouter.get('/:id', async (req, res) => {
 // Добавить специализацию
 specialisationRouter.post('/', async (req, res) => {
     try {
-        const { name } = req.body;
-        const newSpecialisation = await specialisationService.createSpecialisation(name);
-        res.status(200).json(newSpecialisation);
+        // Валидация данных
+        const validationResult = validateSpecialisation(req.body);
+        if (validationResult.error === true) {
+            res.status(400).json(validationResult.validationErrors);
+        } else {
+            const newSpecialisation = await specialisationService.createSpecialisation(req.body);
+            res.status(200).json(newSpecialisation);
+        }
     } catch (err) {
         res.status(500).json(err);
     }
@@ -48,6 +54,7 @@ specialisationRouter.put('/', async (req, res) => {
     try {
         const { id, name } = req.body;
         const specialisation = specialisationService.updateSpecialisation(id, name);
+
         res.status(200).json(specialisation);
     } catch (error) {
         if (error instanceof NotFoundError) {

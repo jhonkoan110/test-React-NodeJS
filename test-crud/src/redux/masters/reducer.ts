@@ -16,7 +16,7 @@ export interface IMaster {
     middlename: string;
     specialisation_id: number;
     name: string;
-    isReadonly: boolean;
+    isReadonly?: boolean;
 }
 
 const initisalState = {

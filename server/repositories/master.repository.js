@@ -1,5 +1,5 @@
 import db from '../db';
-import { NotFound } from './specialisation.repository';
+import { NotFoundError } from './specialisation.repository';
 
 // Получить всех мастеров
 export const getMasters = async () => {
@@ -35,7 +35,15 @@ export const getOneMaster = async (id) => {
 export const createMaster = async (requestBody) => {
     try {
         const { login, firstname, lastname, middlename, specialisation_id } = requestBody;
+        // Проверка, существует ли специализация
+        const specialisation = await db.query(`SELECT * FROM specialisation where id = $1`, [
+            specialisation_id,
+        ]);
+        if (specialisation.rows.length < 1) {
+            throw new NotFoundError();
+        }
 
+        // Добавление мастера
         const newMaster = await db.query(
             `INSERT INTO master (login, firstname, lastname, middlename, specialisation_id) values ($1, $2, $3, $4, $5) RETURNING *`,
             [login, firstname, lastname, middlename, specialisation_id],
@@ -43,6 +51,9 @@ export const createMaster = async (requestBody) => {
 
         return newMaster.rows[0];
     } catch (err) {
+        if (err instanceof NotFoundError) {
+            throw new NotFoundError('Такой специализации не найдено');
+        }
         throw new Error(err.message);
     }
 };

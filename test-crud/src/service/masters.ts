@@ -8,6 +8,7 @@ import {
     saveUpdatedMaster,
 } from './../redux/masters/actionCreators';
 import { getSpecialisations } from './specialisations';
+import { getMasterProfile } from './profile';
 
 // Запрос на сервер + обработка ошибки
 const fetchData = (dispatch: any, url: string, requestParams: any = null) => {
@@ -54,6 +55,7 @@ export const deleteMasterFetch = (id: number) => (dispatch: any) => {
     })
         .then(() => {
             dispatch(deleteMaster(id));
+            dispatch(getMasterProfile(id));
             dispatch(getMasters());
         })
         .catch(() => dispatch(mastersHasErrored(true)));
@@ -88,6 +90,7 @@ export const updateMaster = (updatedMaster: IMaster) => (dispatch: any) => {
     })
         .then(() => {
             dispatch(saveUpdatedMaster(updatedMaster));
+
             dispatch(getMasters());
         })
         .catch(() => dispatch(mastersHasErrored(true)));

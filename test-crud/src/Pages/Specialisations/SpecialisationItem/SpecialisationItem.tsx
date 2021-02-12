@@ -47,13 +47,14 @@ const SpecialisationItem: React.FC<SpecialisationItemProps> = ({ item, onDeleteC
 
     return (
         <div className="specialisations__item">
-            <input
+            <div className="specialisations__item__name">{name}</div>
+            {/* <input
                 className="specialisations__item__name"
                 type="text"
                 value={name}
                 readOnly={isReadonly}
                 onChange={changeNameHandler}
-            />
+            /> */}
             {deleteError !== '' && (
                 <Modal header="Невозможно удалить" onCloseModalClick={closeModalClickHandler}>
                     <p className="specialisations__item__error">
@@ -61,7 +62,7 @@ const SpecialisationItem: React.FC<SpecialisationItemProps> = ({ item, onDeleteC
                     </p>
                 </Modal>
             )}
-            <div className="buttons">
+            {/* <div className="buttons">
                 {isReadonly ? (
                     <button className="item__buttons" onClick={() => startEditClickHandler(id)}>
                         Редактировать
@@ -76,8 +77,8 @@ const SpecialisationItem: React.FC<SpecialisationItemProps> = ({ item, onDeleteC
 
                 <button className="item__buttons" onClick={() => onDeleteClick(id)}>
                     Удалить
-                </button>
-            </div>
+                </button> */}
+            {/* </div> */}
         </div>
     );
 };

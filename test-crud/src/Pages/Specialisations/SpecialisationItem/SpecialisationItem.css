@@ -3,13 +3,18 @@
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid #ececec;
+    padding: 1rem;
+}
+
+.specialisations__item:hover {
+    background-color: rgba(0, 0, 0, 0.2);
 }
 
 .specialisations__item__name {
-    margin-top: 0.5rem;
+    /* margin-top: 0.5rem; */
     width: 80%;
     font-size: 1.2rem;
-    padding: 0.5rem;
+    /* padding: 0.5rem; */
     border: 0;
     outline: 0;
 }

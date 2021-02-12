@@ -9,7 +9,8 @@ import { AppStateType } from '../../redux/store';
 import { createMaster, getMasters } from '../../service/masters';
 import MastersModal from './MastersModal/MastersModal';
 import './MastersPage.css';
-import MastersTable from './MastersTable/MastersTable';
+import MastersList from './MastersTable/MastersList';
+import MastersTable from './MastersTable/MastersList';
 
 const MastersPage: React.FC = () => {
     const [isActiveModal, setIsActiveModal] = useState(false);
@@ -121,18 +122,20 @@ const MastersPage: React.FC = () => {
 
             {isActiveModal && (
                 <MastersModal
+                    isEdit={false}
+                    header="Добавить мастера"
                     master={master}
                     selectedSpec={selectedSpec}
                     specialisations={specialisations}
                     onCloseModal={closeModalHandler}
                     changeHandler={changeHandler}
                     onDropdownSpecClick={selectSpecialisationClickHandler}
-                    onAddMasterClick={addMasterClickHandler}
+                    actionClick={addMasterClickHandler}
                 />
             )}
 
             <div className="masters__body">
-                <MastersTable currentMasters={currentMasters} />
+                <MastersList currentMasters={currentMasters} />
                 <Pagination
                     page={currentPage}
                     color="primary"

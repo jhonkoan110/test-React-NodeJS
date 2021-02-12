@@ -5,7 +5,8 @@
 
 fieldset {
     border: 1px solid #ececec;
-    padding: 0 0.5rem 0.5rem;
+    padding: 0.2rem 0.7rem 0.7rem;
+    border-radius: 4px;
 }
 
 legend {
@@ -13,13 +14,7 @@ legend {
     padding: 4px;
 }
 
-fieldset input {
-    width: 100%;
-    padding: 0.5rem 0;
-
+.profile__data {
     font-size: 1.2rem;
     font-family: 'YS Text', Helvetica Neue, Arial, sans-serif;
-
-    border: 0;
-    outline: 0;
 }

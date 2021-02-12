@@ -12,7 +12,7 @@ export class NotFoundError extends Error {
 export class DeleteSpecialisationError extends Error {
     constructor(message) {
         super(message);
-        this.name = 'DeleteMasterError';
+        this.name = 'DeleteSpecialisationError';
     }
 }
 
@@ -80,21 +80,25 @@ export const updateSpecialisation = async (id, name) => {
 // Удалить специализацию
 export const deleteSpecialisation = async (id) => {
     try {
-        const masters = await db.query(`SELECT * FROM master where specialisation_id = $1`, [id]);
-        if (masters.rows.length > 0) {
-            throw new DeleteMasterError();
-        }
+        // Проверка, существует ли специализация
         let specialisation = await db.query(`SELECT * FROM specialisation where id = $1`, [id]);
         if (specialisation.rows.length < 1) {
             throw new NotFoundError();
         }
+        // Проверка, есть ли ещё мастера у специализации
+        const masters = await db.query(`SELECT * FROM master where specialisation_id = $1`, [id]);
+        if (masters.rows.length > 0) {
+            throw new DeleteSpecialisationError();
+        }
+
+        //Удаление специализации
         specialisation = await db.query(`DELETE FROM specialisation where id = $1`, [id]);
         return specialisation.rows[0];
     } catch (err) {
-        if (err instanceof DeleteMasterError) {
-            throw new DeleteSpecialisationError('У этой специализации ещё есть мастер(-а)');
-        } else if (err instanceof NotFoundError) {
+        if (err instanceof NotFoundError) {
             throw new NotFoundError('Такой специализации не найдено');
+        } else if (err instanceof DeleteSpecialisationError) {
+            throw new DeleteSpecialisationError('У этой специализации ещё есть мастер(-а)');
         } else {
             throw new Error(err.message);
         }
