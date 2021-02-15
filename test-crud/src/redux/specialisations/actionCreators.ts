@@ -1,36 +1,39 @@
 import {
-    SET_SPECIALISATIONS,
-    IS_LOADING,
-    HAS_ERRORED,
-    START_EDIT,
-    DELETE_SPECIALISATION,
-    ADD_SPECIALISATION,
-    SAVE_UPDATED_SPECIALISATION,
-    SET_DELETE_ERROR,
+    SPECIALISATION_ITEM_FETCHED,
+    SPECIALISATION_ITEM_FETCHED_ERR,
+    SPECIALISATION_ITEM_FETCHING,
+    SPECIALISATION_LIST_FETCHED,
+    SPECIALISATION_LIST_FETCHED_ERR,
+    SPECIALISATION_LIST_FETCHING,
 } from './actionTypes';
 import { ISpecialisation } from './reducer';
 
-export const setSpecialisations = (specialisations: Array<ISpecialisation>) => ({
-    type: SET_SPECIALISATIONS,
+// Для списка специализаций
+export const specialisationListFetching = (isListLoading: boolean) => ({
+    type: SPECIALISATION_LIST_FETCHING,
+    isListLoading,
+});
+export const specialisationListFetched = (specialisations: Array<ISpecialisation>) => ({
+    type: SPECIALISATION_LIST_FETCHED,
     specialisations,
 });
-
-export const isLoading = (bool: boolean) => ({ type: IS_LOADING, bool });
-
-export const hasErrored = (bool: boolean) => ({ type: HAS_ERRORED, bool });
-
-export const startEdit = (id: number) => ({ type: START_EDIT, id });
-
-export const deleteSpecialisations = (id: number) => ({ type: DELETE_SPECIALISATION, id });
-
-export const addSpecialisation = (newSpec: ISpecialisation) => ({
-    type: ADD_SPECIALISATION,
-    newSpec,
+export const specialisationListFetchedErr = (error: string) => ({
+    type: SPECIALISATION_LIST_FETCHED_ERR,
+    error,
 });
 
-export const saveUpdatedSpecialisation = (newSpec: ISpecialisation) => ({
-    type: SAVE_UPDATED_SPECIALISATION,
-    newSpec,
+//Для отдельной специализации
+export const specialisationItemFetching = (isItemLoading: boolean) => ({
+    type: SPECIALISATION_ITEM_FETCHING,
+    isItemLoading,
 });
 
-export const setDeleteError = (deleteError: string) => ({ type: SET_DELETE_ERROR, deleteError });
+export const specialisationItemFetched = (specialisation: ISpecialisation) => ({
+    type: SPECIALISATION_ITEM_FETCHED,
+    specialisation,
+});
+
+export const specialisationItemFetchedErr = (error: string) => ({
+    type: SPECIALISATION_ITEM_FETCHED_ERR,
+    error,
+});

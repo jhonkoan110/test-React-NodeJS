@@ -1,0 +1,10 @@
+.master-profile__field-content {
+    padding: 0.5rem 0;
+    font-size: 1.2rem;
+    border-bottom: 1px solid #ececec;
+}
+
+.master-profile__field-content__title {
+    margin-bottom: 1rem;
+    font-weight: bold;
+}

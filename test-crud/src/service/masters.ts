@@ -1,97 +1,69 @@
-import { IMaster } from './../redux/masters/reducer';
 import {
-    setMasters,
-    addMaster,
-    deleteMaster,
-    mastersAreLoading,
-    mastersHasErrored,
-    saveUpdatedMaster,
-} from './../redux/masters/actionCreators';
-import { getSpecialisations } from './specialisations';
-import { getMasterProfile } from './profile';
+    masterItemFetched,
+    masterItemFetchedErr,
+    masterItemFetching,
+    masterListFetched,
+    masterListFetchedErr,
+    masterListFetching,
+} from '../redux/masters/actionCreators';
+import { IMaster } from '../redux/masters/reducer';
+import { getSpecialisationList } from './specialisations';
 
-// Запрос на сервер + обработка ошибки
-const fetchData = (dispatch: any, url: string, requestParams: any = null) => {
-    return fetch(url, requestParams).then((response) => {
-        if (response.status !== 200) {
-            dispatch(mastersAreLoading(false));
-            throw Error(response.statusText);
-        }
-        dispatch(mastersAreLoading(false));
-        return response;
-    });
-};
+// Список мастеров:
+// Загрузка списка мастеров
+export const getMastersList = () => (dispatch: any) => {
+    dispatch(getSpecialisationList());
+    dispatch(masterListFetching(true));
 
-// export const getMasters = () => (dispatch: any) => {
-//     console.log('test');
+    fetch('/api/master')
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Не удалось получить список мастеров');
+            }
 
-//     fetch('/api/master')
-//         .then((res) => res.json())
-//         .then((masters) => console.log(masters));
-// };
-
-// Получить всех мастеров
-export const getMasters = () => (dispatch: any) => {
-    dispatch(mastersAreLoading(true));
-    dispatch(getSpecialisations());
-
-    fetchData(dispatch, `/api/master`)
-        .then((res) => res.json())
-        .then((masters) => {
-            const mastersWithFlags: Array<IMaster> = masters.map((item: IMaster) => {
-                item = { ...item, isReadonly: true };
-                return item;
-            });
-
-            dispatch(setMasters(mastersWithFlags));
+            dispatch(masterListFetching(false));
+            return response;
         })
-        .catch(() => dispatch(mastersHasErrored(true)));
+        .then((response) => response.json())
+        .then((masters) => dispatch(masterListFetched(masters)))
+        .catch((error) => dispatch(masterListFetchedErr(error)));
 };
 
-// Удалить мастера по id
-export const deleteMasterFetch = (id: number) => (dispatch: any) => {
-    fetchData(dispatch, `/api/master/${id}`, {
-        method: 'DELETE',
-    })
-        .then(() => {
-            dispatch(deleteMaster(id));
-            dispatch(getMasterProfile(id));
-            dispatch(getMasters());
-        })
-        .catch(() => dispatch(mastersHasErrored(true)));
-};
-
-// Добавить нового мастера
+// Добавление нового мастера
 export const createMaster = (newMaster: IMaster) => (dispatch: any) => {
-    fetchData(dispatch, `/api/master`, {
+    fetch('/api/master', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(newMaster),
     })
-        .then(() => {
-            dispatch(addMaster(newMaster));
-            dispatch(getMasters());
-        })
-        .catch(() => dispatch(mastersHasErrored(true)));
+        .then((response) => response.json())
+        .then(() => dispatch(getMastersList()));
 };
 
-// Обновить мастера по id
-export const updateMaster = (updatedMaster: IMaster) => (dispatch: any) => {
-    dispatch(mastersAreLoading(true));
+// ==================================== Профиль мастера ====================================
 
-    fetchData(dispatch, `/api/master`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedMaster),
-    })
-        .then(() => {
-            dispatch(saveUpdatedMaster(updatedMaster));
+// Загрузить одного мастера
+export const getMasterProfile = (id: number) => (dispatch: any) => {
+    dispatch(masterItemFetching(true));
 
-            dispatch(getMasters());
+    fetch(`/api/master/${id}`)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Не удалось получить мастера');
+            }
+            dispatch(masterItemFetching(false));
+            return response;
         })
-        .catch(() => dispatch(mastersHasErrored(true)));
+        .then((response) => response.json())
+        .then((master) => dispatch(masterItemFetched(master)))
+        .catch((error) => dispatch(masterItemFetchedErr(error)));
+};
+
+// Удалить мастера по id
+export const deleteMaster = (id: number) => (dispatch: any) => {
+    fetch(`/api/master/${id}`, {
+        method: 'DELETE',
+    });
 };

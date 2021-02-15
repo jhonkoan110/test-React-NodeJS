@@ -1,11 +1,11 @@
-.specialisations__header {
+.block__header {
     display: flex;
     justify-content: space-between;
     padding: 1rem 0;
     border-bottom: 1px solid #ececec;
 }
 
-.specialisations__add-button {
+.block__add-button {
     background-color: #fff;
     border: none;
     outline: none;

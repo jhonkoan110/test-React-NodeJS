@@ -22,7 +22,7 @@ masterRouter.get('/:id', async (req, res) => {
         const master = await masterService.getOneMaster(id);
         res.status(200).json(master);
     } catch (err) {
-        if (err instanceof NotFound) {
+        if (err instanceof NotFoundError) {
             res.status(404).json(err.message);
         } else {
             res.status(500).json(err);

@@ -1,0 +1,10 @@
+.specialisation {
+    padding: 1rem;
+    border-bottom: 1px solid #ececec;
+
+    font-size: 1.2rem;
+}
+
+.specialisation:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}

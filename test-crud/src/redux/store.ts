@@ -1,13 +1,11 @@
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import mastersReducer from './masters/reducer';
-import profileReducer from './profile/reducer';
 import specialisationsReducer from './specialisations/reducer';
 
 const rootReducer = combineReducers({
-    specialisationList: specialisationsReducer,
     masterList: mastersReducer,
-    profile: profileReducer,
+    specialisationsList: specialisationsReducer,
 });
 
 declare global {

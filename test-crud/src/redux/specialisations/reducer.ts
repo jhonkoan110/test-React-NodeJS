@@ -1,82 +1,61 @@
 import {
-    SET_SPECIALISATIONS,
-    IS_LOADING,
-    HAS_ERRORED,
-    START_EDIT,
-    DELETE_SPECIALISATION,
-    ADD_SPECIALISATION,
-    SAVE_UPDATED_SPECIALISATION,
-    SET_DELETE_ERROR,
+    SPECIALISATION_ITEM_FETCHED,
+    SPECIALISATION_ITEM_FETCHED_ERR,
+    SPECIALISATION_ITEM_FETCHING,
+    SPECIALISATION_LIST_FETCHED,
+    SPECIALISATION_LIST_FETCHED_ERR,
+    SPECIALISATION_LIST_FETCHING,
 } from './actionTypes';
+
 export interface ISpecialisation {
     id: number;
-    isReadonly?: boolean;
     name: string;
 }
 
-const initialState = {
-    isLoading: false,
-    hasErrored: false,
+interface IInitialState {
+    currentSpecialisation: null | ISpecialisation;
+    specialisations: Array<ISpecialisation>;
+    isListLoading: boolean;
+    isItemLoading: boolean;
+    listError: null | string;
+    itemError: null | string;
+}
+
+const initialState: IInitialState = {
+    currentSpecialisation: null,
     specialisations: [] as Array<ISpecialisation>,
-    currentId: 0,
-    deleteError: '',
+    isListLoading: false,
+    isItemLoading: false,
+    listError: null,
+    itemError: null,
 };
 
-type InitialStateType = typeof initialState;
-
-const specialisationsReducer = (state: InitialStateType = initialState, action: any) => {
+const specialisationsReducer = (state: IInitialState = initialState, action: any) => {
     switch (action.type) {
-        case IS_LOADING: {
-            return { ...state, isLoading: action.bool };
+        // ===================== List =====================
+        case SPECIALISATION_LIST_FETCHING: {
+            return { ...state, isListLoading: action.isListLoading };
         }
 
-        case HAS_ERRORED: {
-            return { ...state, hasErrored: action.bool };
+        case SPECIALISATION_LIST_FETCHED: {
+            return { ...state, specialisations: action.specialisations };
         }
 
-        case ADD_SPECIALISATION: {
-            return { ...state, specialisations: [...state.specialisations, action.newSpec] };
+        case SPECIALISATION_LIST_FETCHED_ERR: {
+            return { ...state, listError: action.error };
         }
 
-        case DELETE_SPECIALISATION: {
-            return {
-                ...state,
-                specialisations: state.specialisations.filter((item) => item.id !== action.id),
-            };
+        // ===================== Item =====================
+        case SPECIALISATION_ITEM_FETCHING: {
+            return { ...state, isItemLoading: action.isItemLoading };
         }
 
-        case START_EDIT: {
-            const newSpecialisations = state.specialisations.map((item) => {
-                if (item.id === action.id) {
-                    item.isReadonly = false;
-                }
-                return item;
-            });
-            return { ...state, specialisations: newSpecialisations };
+        case SPECIALISATION_ITEM_FETCHED: {
+            return { ...state, currentSpecialisation: action.specialisation };
         }
 
-        case SAVE_UPDATED_SPECIALISATION: {
-            const newSpecialisations = state.specialisations.map((item) => {
-                if (item.id === action.newSpec.id) {
-                    item = action.newSpec;
-                }
-                return item;
-            });
-            return { ...state, specialisations: newSpecialisations };
-        }
-
-        case SET_SPECIALISATIONS: {
-            return {
-                ...state,
-                specialisations: [...action.specialisations],
-                currentId: action.specialisations.length
-                    ? action.specialisations[action.specialisations.length - 1].id
-                    : 0,
-            };
-        }
-
-        case SET_DELETE_ERROR: {
-            return { ...state, deleteError: action.deleteError };
+        case SPECIALISATION_ITEM_FETCHED_ERR: {
+            return { ...state, itemError: action.error };
         }
 
         default:

@@ -1,0 +1,8 @@
+.specialisations__select {
+    width: 100%;
+    margin-top: 1rem;
+    border: 2px solid #ececec;
+    padding: 1rem;
+    font-size: 1.2rem;
+    font-family: 'YS Text', Helvetica Neue, Arial, sans-serif;
+}

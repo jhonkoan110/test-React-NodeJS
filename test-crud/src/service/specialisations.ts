@@ -1,108 +1,89 @@
+import {
+    specialisationItemFetched,
+    specialisationItemFetchedErr,
+} from './../redux/specialisations/actionCreators';
 import { ISpecialisation } from './../redux/specialisations/reducer';
 import {
-    setSpecialisations,
-    isLoading,
-    hasErrored,
-    deleteSpecialisations,
-    addSpecialisation,
-    saveUpdatedSpecialisation,
-    setDeleteError,
-} from './../redux/specialisations/actionCreators';
+    specialisationItemFetching,
+    specialisationListFetched,
+    specialisationListFetchedErr,
+    specialisationListFetching,
+} from '../redux/specialisations/actionCreators';
 
-// Запрос на сервер + обработка ошибки
-const fetchData = (dispatch: any, url: string, requestParams: any = null) => {
-    return fetch(url, requestParams).then((response: any) => {
-        if (response.status === 400) {
-            dispatch(isLoading(false));
-            throw Error('У этой специализации ещё есть мастер(-а).');
-        }
-        if (response.status !== 200) {
-            dispatch(isLoading(false));
-            throw Error(response.statusText);
-        }
-        dispatch(isLoading(false));
-        return response;
-    });
-};
+// =================== List ===================
 
-// Получить все специализации с сервера
-export const getSpecialisations = () => (dispatch: any) => {
-    dispatch(isLoading(true));
+// Загрузка списка специализаций
+export const getSpecialisationList = () => (dispatch: any) => {
+    dispatch(specialisationListFetching(true));
 
-    fetchData(dispatch, '/api/specialisation', {
-        mode: 'cors',
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-        },
-    })
-        .then((response) => response.json())
-        .then((specialisations) => {
-            const specialisationsWithFlags = specialisations.map((item: ISpecialisation) => {
-                item = { ...item, isReadonly: true };
-                return item;
-            });
-            dispatch(setSpecialisations(specialisationsWithFlags));
+    fetch('/api/specialisation')
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Не удалось получить список специализаций');
+            }
+            dispatch(specialisationListFetching(false));
+            return response;
         })
-        .catch(() => dispatch(hasErrored(true)));
+        .then((response) => response.json())
+        .then((specialisations) => dispatch(specialisationListFetched(specialisations)))
+        .catch((error) => specialisationListFetchedErr(error));
 };
 
-// Добавить новую специализацию
-export const createSpecialisation = (newSpecialisation: ISpecialisation) => (dispatch: any) => {
-    dispatch(isLoading(true));
-
-    fetchData(dispatch, '/api/specialisation', {
+// Добавить специализацию
+export const createSpecialisation = (newSpec: ISpecialisation) => (dispatch: any) => {
+    fetch('/api/specialisation', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newSpecialisation),
+        body: JSON.stringify(newSpec),
     })
         .then((response) => response.json())
-        .then((data) => {
-            dispatch(addSpecialisation(data));
-            dispatch(getSpecialisations());
+        .then(() => dispatch(getSpecialisationList()));
+};
+
+// =================== Item ===================
+
+// Получить одну специализацию по id
+export const getOneSpecialisation = (id: number) => (dispatch: any) => {
+    dispatch(specialisationItemFetching(true));
+
+    fetch(`/api/specialisation/${id}`)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Не удалось получить специализацию');
+            }
+            dispatch(specialisationItemFetching(false));
+            return response;
         })
-        .catch(() => dispatch(hasErrored(true)));
+        .then((response) => response.json())
+        .then((specialisation: ISpecialisation) =>
+            dispatch(specialisationItemFetched(specialisation)),
+        )
+        .catch((error) => dispatch(specialisationItemFetchedErr(error)));
 };
 
 // Удалить специализацию по id
 export const deleteSpecialisation = (id: number) => (dispatch: any) => {
     fetch(`/api/specialisation/${id}`, {
         method: 'DELETE',
-    })
-        .then((response) => {
-            if (response.status === 400) {
-                const deleteError = response.json();
-                deleteError.then((error) => dispatch(setDeleteError(error.title)));
-            }
-            if (!response.ok && response.status !== 400) {
-                throw Error(response.statusText);
-            }
-
-            dispatch(isLoading(false));
-            return response;
-        })
-        .then(() => {
-            dispatch(deleteSpecialisations(id));
-            dispatch(getSpecialisations());
-        })
-        .catch(() => dispatch(hasErrored(true)));
+    }).then(() => getSpecialisationList());
+    // .then((response) => {
+    //     if (response.status === 400) {
+    //         // dispatch(specialisationItemFetchedErr(response.json()))
+    //         return response.json();
+    //     }
+    // })
+    // .then((data) => dispatch(specialisationItemFetchedErr(data)));
 };
 
 // Обновить специализацию по id
-export const updateSpecialisation = (newItem: ISpecialisation, id: number) => (dispatch: any) => {
-    fetchData(dispatch, `/api/specialisation`, {
+export const updateSpecialisation = (newSpec: ISpecialisation) => (dispatch: any) => {
+    fetch('/api/specialisation', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newItem),
-    })
-        .then(() => {
-            dispatch(saveUpdatedSpecialisation(newItem));
-            dispatch(getSpecialisations());
-        })
-        .catch(() => {
-            dispatch(hasErrored(true));
-        });
+        body: JSON.stringify(newSpec),
+    }).then(() => dispatch(getOneSpecialisation(newSpec.id)));
 };

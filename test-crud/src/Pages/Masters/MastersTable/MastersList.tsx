@@ -1,6 +1,6 @@
 import React from 'react';
 import { IMaster } from '../../../redux/masters/reducer';
-import Master from './Master/Master';
+import MasterItem from './Master/MasterItem';
 import './MastersList.css';
 
 interface TableProps {
@@ -11,7 +11,7 @@ const MastersList: React.FC<TableProps> = ({ currentMasters }) => {
     return (
         <div className="masters__list">
             {currentMasters.map((master: IMaster) => {
-                return <Master key={master.id} master={master} />;
+                return <MasterItem key={master.id} master={master} />;
             })}
         </div>
     );

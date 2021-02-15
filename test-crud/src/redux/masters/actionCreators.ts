@@ -1,27 +1,49 @@
 import {
-    ADD_MASTER,
-    DELETE_MASTER,
-    SET_MASTERS,
-    START_EDIT_MASTER,
-    MASTERS_ARE_LOADING,
-    MASTERS_HAS_ERRORED,
-    SAVE_UPDATED_MASTER,
-    SET_CURRENT_MASTER,
+    MASTER_LIST_FETCHED,
+    MASTER_LIST_FETCHING,
+    MASTER_LIST_FETCHED_ERR,
+    MASTER_ITEM_FETCHING,
+    MASTER_ITEM_FETCHED,
+    MASTER_ITEM_FETCHED_ERR,
 } from './actionTypes';
 import { IMaster } from './reducer';
 
-export const setMasters = (masters: Array<IMaster>) => ({ type: SET_MASTERS, masters });
+// ======================= Для списка мастеров =======================
 
-export const addMaster = (newMaster: IMaster) => ({ type: ADD_MASTER, newMaster });
+// Список загружается
+export const masterListFetching = (isListLoading: boolean) => ({
+    type: MASTER_LIST_FETCHING,
+    isListLoading,
+});
 
-export const deleteMaster = (id: number) => ({ type: DELETE_MASTER, id });
+// Список загрузился
+export const masterListFetched = (masters: IMaster) => ({
+    type: MASTER_LIST_FETCHED,
+    masters,
+});
 
-export const startEditMaster = (id: number) => ({ type: START_EDIT_MASTER, id });
+// Список не загрузился, ошибка
+export const masterListFetchedErr = (error: string) => ({
+    type: MASTER_LIST_FETCHED_ERR,
+    error,
+});
 
-export const mastersAreLoading = (bool: boolean) => ({ type: MASTERS_ARE_LOADING, bool });
+// ======================= Для одного мастера =======================
 
-export const mastersHasErrored = (bool: boolean) => ({ type: MASTERS_HAS_ERRORED, bool });
+// Мастер загружается
+export const masterItemFetching = (isItemLoading: boolean) => ({
+    type: MASTER_ITEM_FETCHING,
+    isItemLoading,
+});
 
-export const saveUpdatedMaster = (newMaster: IMaster) => ({ type: SAVE_UPDATED_MASTER, newMaster });
+// Мастер загрузился
+export const masterItemFetched = (master: IMaster) => ({
+    type: MASTER_ITEM_FETCHED,
+    master,
+});
 
-export const setCurrentMaster = (master: IMaster) => ({ type: SET_CURRENT_MASTER, master });
+// Мастер не загрузился, ошибка
+export const masterItemFetchedErr = (error: string) => ({
+    type: MASTER_ITEM_FETCHED_ERR,
+    error,
+});

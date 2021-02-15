@@ -1,0 +1,14 @@
+.specialisation-info__masters {
+    padding: 1rem 0;
+    list-style: none;
+    font-size: 1.2rem;
+}
+
+.specialisation-info__masters-item {
+    padding: 1rem;
+    border-bottom: 1px solid #ececec;
+}
+
+.specialisation-info__masters-item:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}

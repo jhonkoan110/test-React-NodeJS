@@ -1,7 +1,9 @@
 import React from 'react';
 import './Block.css';
 
-const Block: React.FC = ({ children }) => {
+interface BlockProps {}
+
+const Block: React.FC<BlockProps> = ({ children }) => {
     return <div className="block">{children}</div>;
 };
 

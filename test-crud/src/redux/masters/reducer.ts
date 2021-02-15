@@ -1,13 +1,12 @@
 import {
-    ADD_MASTER,
-    DELETE_MASTER,
-    SET_MASTERS,
-    START_EDIT_MASTER,
-    MASTERS_ARE_LOADING,
-    MASTERS_HAS_ERRORED,
-    SAVE_UPDATED_MASTER,
-    SET_CURRENT_MASTER,
+    MASTER_ITEM_FETCHED,
+    MASTER_ITEM_FETCHED_ERR,
+    MASTER_ITEM_FETCHING,
+    MASTER_LIST_FETCHED,
+    MASTER_LIST_FETCHED_ERR,
+    MASTER_LIST_FETCHING,
 } from './actionTypes';
+
 export interface IMaster {
     id: number;
     login: string;
@@ -16,74 +15,57 @@ export interface IMaster {
     middlename: string;
     specialisation_id: number;
     name: string;
-    isReadonly?: boolean;
 }
 
-const initisalState = {
-    isLoading: false,
-    hasErrored: false,
+interface IInitialState {
+    masters: Array<IMaster>;
+    currentMaster: null | IMaster;
+    isListLoading: boolean;
+    isItemLoading: boolean;
+    listError: null | string;
+    itemError: null | string;
+}
+
+const initialState: IInitialState = {
     masters: [] as Array<IMaster>,
-    currentId: 0,
     currentMaster: null,
+    isListLoading: false,
+    isItemLoading: false,
+    listError: null,
+    itemError: null,
 };
 
-type InitialStateType = typeof initisalState;
-
-const mastersReducer = (state: InitialStateType = initisalState, action: any): InitialStateType => {
+const mastersReducer = (state: IInitialState = initialState, action: any) => {
     switch (action.type) {
-        case SET_MASTERS: {
-            return {
-                ...state,
-                masters: action.masters,
-                currentId: action.masters.length ? action.masters[action.masters.length - 1].id : 0,
-            };
+        // =================== Master List ===================
+        case MASTER_LIST_FETCHING: {
+            return { ...state, isListLoading: action.isListLoading };
         }
 
-        case ADD_MASTER: {
-            return {
-                ...state,
-                masters: [...state.masters, action.newMaster],
-            };
+        case MASTER_LIST_FETCHED: {
+            return { ...state, masters: action.masters };
         }
 
-        case DELETE_MASTER: {
-            return { ...state, masters: state.masters.filter((item) => item.id !== action.id) };
+        case MASTER_LIST_FETCHED_ERR: {
+            return { ...state, error: action.error };
         }
 
-        case START_EDIT_MASTER: {
-            const newMasters = state.masters.map((item) => {
-                if (item.id === action.id) {
-                    item.isReadonly = false;
-                }
-                return item;
-            });
-            return { ...state, masters: newMasters };
+        // =================== Master Item ===================
+        case MASTER_ITEM_FETCHING: {
+            return { ...state, isItemLoading: action.isItemLoading };
         }
 
-        case MASTERS_ARE_LOADING: {
-            return { ...state, isLoading: action.bool };
-        }
-
-        case MASTERS_HAS_ERRORED: {
-            return { ...state, hasErrored: action.bool };
-        }
-
-        case SAVE_UPDATED_MASTER: {
-            const newMasters: Array<IMaster> = state.masters.map((item: IMaster) => {
-                if (item.id === action.newMaster.id) {
-                    item = action.newMaster;
-                }
-                return item;
-            });
-            return { ...state, masters: newMasters };
-        }
-
-        case SET_CURRENT_MASTER: {
+        case MASTER_ITEM_FETCHED: {
             return { ...state, currentMaster: action.master };
         }
 
-        default:
+        case MASTER_ITEM_FETCHED_ERR: {
+            return { ...state, itemError: action.error };
+        }
+
+        default: {
             return state;
+        }
     }
 };
 

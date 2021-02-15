@@ -1,17 +1,18 @@
-import React from 'react';
-import Dropdown from '../../../components/Dropdown/Dropdown';
+import React, { ChangeEvent } from 'react';
 import Modal from '../../../components/Modal/Modal';
 import { ISpecialisation } from '../../../redux/specialisations/reducer';
+import './MastersModal.css';
 
 interface MastersModalProps {
     isEdit: boolean;
     header: string;
-    master: any;
+    master?: any;
     selectedSpec: string;
     specialisations: Array<ISpecialisation>;
     onCloseModal: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     changeHandler: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    onDropdownSpecClick: (id: number, specialisationName: string) => void;
+    onSelectSpecialisationChange: (e: ChangeEvent<HTMLSelectElement>) => void;
+    onOptionClick: (id: number) => void;
     actionClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
@@ -23,7 +24,8 @@ const MastersModal: React.FC<MastersModalProps> = ({
     specialisations,
     onCloseModal,
     changeHandler,
-    onDropdownSpecClick,
+    onSelectSpecialisationChange,
+    onOptionClick,
     actionClick,
 }) => {
     return (
@@ -61,11 +63,15 @@ const MastersModal: React.FC<MastersModalProps> = ({
                 value={master.middlename}
                 onChange={changeHandler}
             />
-            <Dropdown
-                selectedSpec={selectedSpec}
-                specialisations={specialisations}
-                onSpecClick={onDropdownSpecClick}
-            />
+            <select className="specialisations__select" onChange={onSelectSpecialisationChange}>
+                {specialisations.map((item: ISpecialisation) => {
+                    return (
+                        <option key={item.id} onClick={() => onOptionClick(item.id)}>
+                            {item.name}
+                        </option>
+                    );
+                })}
+            </select>
 
             <div className="modal__content__actions">
                 <button className="modal__content__actions__buttons" onClick={actionClick}>
