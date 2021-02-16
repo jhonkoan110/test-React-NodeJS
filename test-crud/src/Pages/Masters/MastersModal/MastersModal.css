@@ -1,6 +1,7 @@
 .specialisations__select {
     width: 100%;
     margin-top: 1rem;
+    padding-right: 1rem;
     border-radius: 4px;
     border: 2px solid #ececec;
     padding: 1rem;
@@ -16,4 +17,8 @@
     padding: 1rem;
     font-size: 1.2rem;
     font-family: 'YS Text', Helvetica Neue, Arial, sans-serif;
+}
+
+.modal__content__select-placeholder {
+    color: #ececec;
 }

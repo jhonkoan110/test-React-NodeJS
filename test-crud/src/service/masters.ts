@@ -134,7 +134,7 @@ export const updateMaster = (updatedMaster: IMaster) => (dispatch: any) => {
 };
 
 // Удалить мастера по id
-export const deleteMaster = (id: number) => (dispatch: any) => {
+export const deleteMaster = (id: number, history: any) => (dispatch: any) => {
     dispatch(masterItemFetching(true));
 
     fetch(`/api/master/${id}`, {
@@ -159,5 +159,6 @@ export const deleteMaster = (id: number) => (dispatch: any) => {
                 return response;
             }
         })
+        .then(() => history.push('/masters'))
         .catch((error) => dispatch(setMasterError(error)));
 };

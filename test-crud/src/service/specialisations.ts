@@ -1,3 +1,4 @@
+import { useHistory } from 'react-router-dom';
 import {
     specialisationError,
     specialisationItemFetched,
@@ -146,7 +147,7 @@ export const updateSpecialisation = (newSpec: ISpecialisation) => (dispatch: any
 };
 
 // Удалить специализацию по id
-export const deleteSpecialisation = (id: number) => (dispatch: any) => {
+export const deleteSpecialisation = (id: number, history: any) => (dispatch: any) => {
     dispatch(specialisationItemFetching(true));
 
     fetch(`/api/specialisation/${id}`, {
@@ -181,6 +182,7 @@ export const deleteSpecialisation = (id: number) => (dispatch: any) => {
             dispatch(specialisationItemFetching(false));
             return response;
         })
+        .then(() => history.push('/specialisations'))
         .catch((error) => {
             dispatch(specialisationItemFetching(false));
             dispatch(specialisationError(error));

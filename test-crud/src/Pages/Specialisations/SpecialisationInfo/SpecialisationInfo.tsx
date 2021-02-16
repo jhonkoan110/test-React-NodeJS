@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink, useHistory, useParams } from 'react-router-dom';
 import Block from '../../../components/Block/Block';
 import BlockBody from '../../../components/BlockBody/BlockBody';
 import BlockHeader from '../../../components/BlockHeader/BlockHeader';
@@ -20,6 +20,7 @@ import './SpecialisationInfo.css';
 const SpecialisationInfo: React.FC = () => {
     const { id }: any = useParams();
     const dispatch = useDispatch();
+    const history = useHistory();
     const isLoading = useSelector((state: AppStateType) => state.specialisationsList.isItemLoading);
     const isFetchingError = useSelector(
         (state: AppStateType) => state.specialisationsList.itemError,
@@ -71,7 +72,7 @@ const SpecialisationInfo: React.FC = () => {
 
     // Удалить специализацию
     const deleteSpecialisationHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-        dispatch(deleteSpecialisation(currentSpecialisation.id));
+        dispatch(deleteSpecialisation(currentSpecialisation.id, history));
     };
 
     // Сохранить изменения
@@ -92,7 +93,7 @@ const SpecialisationInfo: React.FC = () => {
         return <p>{isFetchingError}</p>;
     }
 
-    if (spec) {
+    if (currentSpecialisation) {
         return (
             <Block>
                 <BlockHeader header={`Специализация "${currentSpecialisation.name}"`} />

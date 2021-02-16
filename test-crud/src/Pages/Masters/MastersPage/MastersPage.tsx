@@ -6,6 +6,7 @@ import BlockBody from '../../../components/BlockBody/BlockBody';
 import BlockHeader from '../../../components/BlockHeader/BlockHeader';
 import Error from '../../../components/Error/Error';
 import Loader from '../../../components/Loader/Loader';
+import VoidBox from '../../../components/VoidBox/VoidBox';
 import { setMasterError } from '../../../redux/masters/actionCreators';
 import { IMaster } from '../../../redux/masters/reducer';
 import { AppStateType } from '../../../redux/store';
@@ -112,6 +113,33 @@ const MastersPage: React.FC = () => {
 
     if (isFetchingError !== null) {
         return <Error message={isFetchingError} />;
+    }
+
+    if (masters.length < 1) {
+        return (
+            <div>
+                <VoidBox
+                    header="Мастера"
+                    text="Мастера отсутствуют"
+                    headerButtonText="Добавить мастера"
+                    onOpenModalClick={openModalClickHandler}
+                />
+                {isOpenModal && (
+                    <MastersModal
+                        header="Добавить мастера"
+                        error={error ? error : null}
+                        master={master}
+                        specialisations={specialisations}
+                        isEdit={false}
+                        // selectedSpec={selectedSpec}
+                        onCloseModal={closeModalHandler}
+                        changeHandler={changeHandler}
+                        actionClick={addMasterHandler}
+                        onSelectSpecialisationChange={selectSpecialisationHandler}
+                    />
+                )}
+            </div>
+        );
     }
 
     return (

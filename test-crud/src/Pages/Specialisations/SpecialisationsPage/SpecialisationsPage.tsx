@@ -5,6 +5,7 @@ import BlockBody from '../../../components/BlockBody/BlockBody';
 import BlockHeader from '../../../components/BlockHeader/BlockHeader';
 import Error from '../../../components/Error/Error';
 import Loader from '../../../components/Loader/Loader';
+import VoidBox from '../../../components/VoidBox/VoidBox';
 import { specialisationItemFetchedErr } from '../../../redux/specialisations/actionCreators';
 import { ISpecialisation } from '../../../redux/specialisations/reducer';
 import { AppStateType } from '../../../redux/store';
@@ -66,6 +67,30 @@ const SpecialisationsPage: React.FC = () => {
 
     if (error !== null) {
         return <Error message={error} />;
+    }
+
+    if (specialisations.length < 1) {
+        return (
+            <div>
+                <VoidBox
+                    header="Специализации"
+                    headerButtonText="Добавить специализацию"
+                    text="Специализации отсутствуют"
+                    onOpenModalClick={openModalHandler}
+                />
+                {isOpenModal && (
+                    <SpecialisationsModal
+                        isEdit={false}
+                        header="Добавить специализацию"
+                        error={creatingError ? creatingError.name : creatingError}
+                        specisalisation={specialisation}
+                        onCloseModal={closeModalHandler}
+                        changeHandler={changeHandler}
+                        actionClick={addSpecialisationHandler}
+                    />
+                )}
+            </div>
+        );
     }
 
     return (

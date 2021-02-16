@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import Block from '../../../components/Block/Block';
 import BlockBody from '../../../components/BlockBody/BlockBody';
 import BlockHeader from '../../../components/BlockHeader/BlockHeader';
@@ -10,7 +10,6 @@ import { setMasterError } from '../../../redux/masters/actionCreators';
 import { IMaster } from '../../../redux/masters/reducer';
 import { AppStateType } from '../../../redux/store';
 import { deleteMaster, getMasterProfile, updateMaster } from '../../../service/masters';
-import SpecialisationsModal from '../../Specialisations/SpecialisationsModal/SpecialisationsModal';
 import MastersModal from '../MastersModal/MastersModal';
 import './MasterProfile.css';
 
@@ -29,9 +28,11 @@ const MasterProfile: React.FC = () => {
     const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
     const [isOpenEditModal, setIsOpenEditMpdal] = useState(false);
     const [master, setMaster] = useState(currentMaster);
+    const history: any = useHistory();
 
     useEffect(() => {
         dispatch(getMasterProfile(id));
+        console.log(master);
     }, []);
 
     // Окрыть модальное окно удаления
@@ -93,7 +94,7 @@ const MasterProfile: React.FC = () => {
 
     // Удалить мастера
     const deleteMasterHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-        dispatch(deleteMaster(id));
+        dispatch(deleteMaster(id, history));
     };
 
     if (isLoading) {
@@ -104,7 +105,7 @@ const MasterProfile: React.FC = () => {
         return <p>{isFetchingError}</p>;
     }
 
-    if (master) {
+    if (currentMaster) {
         return (
             <Block>
                 <BlockHeader header={`Профиль мастера ${currentMaster.login}`} />
@@ -172,6 +173,7 @@ const MasterProfile: React.FC = () => {
         );
     }
     return null;
+    // return history.push('/masters');
 };
 
 export default MasterProfile;
