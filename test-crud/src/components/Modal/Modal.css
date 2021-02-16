@@ -63,6 +63,23 @@
     border: 2px solid black;
 }
 
+.modal__content__input__error {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 1rem;
+    font-size: 1.2rem;
+    font-family: 'YS Text', Helvetica Neue, Arial, sans-serif;
+    border: 2px solid red;
+    border-radius: 4px;
+    outline: 0;
+}
+
+.modal__content__error {
+    color: red;
+    font-family: 'YS Text', Helvetica Neue, Arial, sans-serif;
+    padding-left: 5px;
+}
+
 .modal__content__actions {
     margin-top: 1rem;
     display: flex;

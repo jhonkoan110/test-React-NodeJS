@@ -52,10 +52,16 @@ specialisationRouter.post('/', async (req, res) => {
 // Обновить специализацию
 specialisationRouter.put('/', async (req, res) => {
     try {
-        const { id, name } = req.body;
-        const specialisation = await specialisationService.updateSpecialisation(id, name);
+        // Валидация данных
+        const validationResult = await validateSpecialisation(req.body);
+        if (validationResult.error === true) {
+            res.status(400).json(validationResult.validationErrors);
+        } else {
+            const { id, name } = req.body;
+            const specialisation = await specialisationService.updateSpecialisation(id, name);
 
-        res.status(200).json(specialisation);
+            res.status(200).json(specialisation);
+        }
     } catch (error) {
         if (error instanceof NotFoundError) {
             console.log(error.message);

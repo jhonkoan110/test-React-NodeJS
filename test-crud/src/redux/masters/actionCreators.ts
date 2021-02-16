@@ -5,8 +5,9 @@ import {
     MASTER_ITEM_FETCHING,
     MASTER_ITEM_FETCHED,
     MASTER_ITEM_FETCHED_ERR,
+    SET_MASTER_ERROR,
 } from './actionTypes';
-import { IMaster } from './reducer';
+import { IMaster, IMasterError } from './reducer';
 
 // ======================= Для списка мастеров =======================
 
@@ -45,5 +46,11 @@ export const masterItemFetched = (master: IMaster) => ({
 // Мастер не загрузился, ошибка
 export const masterItemFetchedErr = (error: string) => ({
     type: MASTER_ITEM_FETCHED_ERR,
+    error,
+});
+
+// Общая ошибка
+export const setMasterError = (error: null | IMasterError) => ({
+    type: SET_MASTER_ERROR,
     error,
 });

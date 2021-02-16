@@ -6,6 +6,7 @@ import BlockBody from '../../../components/BlockBody/BlockBody';
 import BlockHeader from '../../../components/BlockHeader/BlockHeader';
 import Loader from '../../../components/Loader/Loader';
 import DeleteModal from '../../../components/Modal/DeleteModal/DeleteModal';
+import { specialisationError } from '../../../redux/specialisations/actionCreators';
 import { ISpecialisation } from '../../../redux/specialisations/reducer';
 import { AppStateType } from '../../../redux/store';
 import {
@@ -20,7 +21,10 @@ const SpecialisationInfo: React.FC = () => {
     const { id }: any = useParams();
     const dispatch = useDispatch();
     const isLoading = useSelector((state: AppStateType) => state.specialisationsList.isItemLoading);
-    const error = useSelector((state: AppStateType) => state.specialisationsList.itemError);
+    const isFetchingError = useSelector(
+        (state: AppStateType) => state.specialisationsList.itemError,
+    );
+    const error = useSelector((state: AppStateType) => state.specialisationsList.error);
     const [isOpenEditModal, setIsOpenEditModal] = useState(false);
     const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
     const currentSpecialisation = useSelector(
@@ -40,21 +44,25 @@ const SpecialisationInfo: React.FC = () => {
 
     // Закрыть модальное окно удаления
     const closeDeleteModalhandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        dispatch(specialisationError(null));
         setIsOpenDeleteModal(false);
     };
 
     // Открыть модальное окно редактирования
     const openEditModalHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        setSpec(currentSpecialisation);
         setIsOpenEditModal(true);
     };
 
     // Закрыть модальное окно редактирования
     const closeEditModalHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        dispatch(specialisationError(null));
         setIsOpenEditModal(false);
     };
 
     // Обработчик инпута
     const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        dispatch(specialisationError(null));
         setSpec({
             ...spec,
             name: e.target.value,
@@ -74,15 +82,14 @@ const SpecialisationInfo: React.FC = () => {
         };
 
         dispatch(updateSpecialisation(updatedSpec));
-        setIsOpenEditModal(false);
     };
 
     if (isLoading) {
         return <Loader />;
     }
 
-    if (error) {
-        return <p>{error}</p>;
+    if (isFetchingError) {
+        return <p>{isFetchingError}</p>;
     }
 
     if (spec) {
@@ -129,6 +136,7 @@ const SpecialisationInfo: React.FC = () => {
                     <SpecialisationsModal
                         isEdit={true}
                         header="Редактирование специализации"
+                        error={error ? error.name : error}
                         specisalisation={spec}
                         onCloseModal={closeEditModalHandler}
                         changeHandler={changeHandler}
@@ -140,6 +148,7 @@ const SpecialisationInfo: React.FC = () => {
                     <DeleteModal
                         header={`Удаление специализации`}
                         title={`специализацию ${currentSpecialisation.name}`}
+                        error={error}
                         onCloseModalClick={closeDeleteModalhandler}
                         onDeleteClick={deleteSpecialisationHandler}
                     />

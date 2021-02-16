@@ -1,4 +1,5 @@
 import {
+    SPECIALISATION_ERROR,
     SPECIALISATION_ITEM_FETCHED,
     SPECIALISATION_ITEM_FETCHED_ERR,
     SPECIALISATION_ITEM_FETCHING,
@@ -6,7 +7,7 @@ import {
     SPECIALISATION_LIST_FETCHED_ERR,
     SPECIALISATION_LIST_FETCHING,
 } from './actionTypes';
-import { ISpecialisation } from './reducer';
+import { ISpecError, ISpecialisation } from './reducer';
 
 // Для списка специализаций
 export const specialisationListFetching = (isListLoading: boolean) => ({
@@ -33,7 +34,13 @@ export const specialisationItemFetched = (specialisation: ISpecialisation) => ({
     specialisation,
 });
 
-export const specialisationItemFetchedErr = (error: string) => ({
+export const specialisationItemFetchedErr = (error: string | null) => ({
     type: SPECIALISATION_ITEM_FETCHED_ERR,
+    error,
+});
+
+// Тело ошибки с сервера
+export const specialisationError = (error: null | ISpecError) => ({
+    type: SPECIALISATION_ERROR,
     error,
 });

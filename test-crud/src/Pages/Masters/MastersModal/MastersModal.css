@@ -1,7 +1,18 @@
 .specialisations__select {
     width: 100%;
     margin-top: 1rem;
+    border-radius: 4px;
     border: 2px solid #ececec;
+    padding: 1rem;
+    font-size: 1.2rem;
+    font-family: 'YS Text', Helvetica Neue, Arial, sans-serif;
+}
+
+.specialisations__select__error {
+    width: 100%;
+    margin-top: 1rem;
+    border: 2px solid red;
+    outline: 1px solid red;
     padding: 1rem;
     font-size: 1.2rem;
     font-family: 'YS Text', Helvetica Neue, Arial, sans-serif;

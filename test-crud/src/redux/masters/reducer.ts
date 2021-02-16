@@ -5,6 +5,7 @@ import {
     MASTER_LIST_FETCHED,
     MASTER_LIST_FETCHED_ERR,
     MASTER_LIST_FETCHING,
+    SET_MASTER_ERROR,
 } from './actionTypes';
 
 export interface IMaster {
@@ -17,6 +18,14 @@ export interface IMaster {
     name: string;
 }
 
+export interface IMasterError {
+    login: string;
+    firstname: string;
+    lastname: string;
+    middlename: string;
+    specialisation: string;
+}
+
 interface IInitialState {
     masters: Array<IMaster>;
     currentMaster: null | IMaster;
@@ -24,6 +33,7 @@ interface IInitialState {
     isItemLoading: boolean;
     listError: null | string;
     itemError: null | string;
+    error: null | IMasterError;
 }
 
 const initialState: IInitialState = {
@@ -33,6 +43,7 @@ const initialState: IInitialState = {
     isItemLoading: false,
     listError: null,
     itemError: null,
+    error: null,
 };
 
 const mastersReducer = (state: IInitialState = initialState, action: any) => {
@@ -47,7 +58,7 @@ const mastersReducer = (state: IInitialState = initialState, action: any) => {
         }
 
         case MASTER_LIST_FETCHED_ERR: {
-            return { ...state, error: action.error };
+            return { ...state, listError: action.error };
         }
 
         // =================== Master Item ===================
@@ -61,6 +72,11 @@ const mastersReducer = (state: IInitialState = initialState, action: any) => {
 
         case MASTER_ITEM_FETCHED_ERR: {
             return { ...state, itemError: action.error };
+        }
+
+        // =================== Master Error ===================
+        case SET_MASTER_ERROR: {
+            return { ...state, error: action.error };
         }
 
         default: {

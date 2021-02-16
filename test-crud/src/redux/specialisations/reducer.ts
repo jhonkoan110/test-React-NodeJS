@@ -1,4 +1,5 @@
 import {
+    SPECIALISATION_ERROR,
     SPECIALISATION_ITEM_FETCHED,
     SPECIALISATION_ITEM_FETCHED_ERR,
     SPECIALISATION_ITEM_FETCHING,
@@ -12,6 +13,10 @@ export interface ISpecialisation {
     name: string;
 }
 
+export interface ISpecError {
+    name: string;
+}
+
 interface IInitialState {
     currentSpecialisation: null | ISpecialisation;
     specialisations: Array<ISpecialisation>;
@@ -19,6 +24,7 @@ interface IInitialState {
     isItemLoading: boolean;
     listError: null | string;
     itemError: null | string;
+    error: null | ISpecError;
 }
 
 const initialState: IInitialState = {
@@ -28,6 +34,7 @@ const initialState: IInitialState = {
     isItemLoading: false,
     listError: null,
     itemError: null,
+    error: null,
 };
 
 const specialisationsReducer = (state: IInitialState = initialState, action: any) => {
@@ -56,6 +63,11 @@ const specialisationsReducer = (state: IInitialState = initialState, action: any
 
         case SPECIALISATION_ITEM_FETCHED_ERR: {
             return { ...state, itemError: action.error };
+        }
+
+        // ===================== Error =====================
+        case SPECIALISATION_ERROR: {
+            return { ...state, error: action.error };
         }
 
         default:

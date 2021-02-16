@@ -2,3 +2,9 @@
     padding: 1rem 0;
     font-size: 1.2rem;
 }
+
+.delete-modal__text__error {
+    padding: 1rem 0;
+    font-size: 1.2rem;
+    color: red;
+}

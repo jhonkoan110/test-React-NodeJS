@@ -1,15 +1,22 @@
 import React from 'react';
 import Block from '../Block/Block';
+import BlockBody from '../BlockBody/BlockBody';
+import BlockHeader from '../BlockHeader/BlockHeader';
+import './Error.css';
 
-const Error: React.FC = () => {
+interface ErrorProps {
+    message: string | null;
+}
+
+const Error: React.FC<ErrorProps> = ({ message }) => {
     return (
         <Block>
-            <div className="masters__header">
-                <h2>Ошибка</h2>
-            </div>
-            <div className="masters__body">
-                <p>Во время загрузки произошла ошибка</p>
-            </div>
+            <BlockHeader header="Ошибка" />
+
+            <BlockBody>
+                <p className="error__message">{message}</p>
+            </BlockBody>
+            <div className="masters__body"></div>
         </Block>
     );
 };

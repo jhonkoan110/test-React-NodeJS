@@ -15,7 +15,6 @@ const App: React.FC = () => {
                     <MastersPage />
                 </Route>
                 <Route path="/specialisations">
-                    {' '}
                     <SpecialisationsPage />
                 </Route>
                 <Route path="/profile/:id">

@@ -46,9 +46,9 @@ masterRouter.post('/', async (req, res) => {
     try {
         // Валидация данных
         const validationResult = await validateMaster(req.body);
-        console.log(validationResult);
+        // console.log(validationResult);
         if (validationResult.error === true) {
-            res.status(400).json(validationResult);
+            res.status(400).json(validationResult.validationErrors);
         } else {
             const requestBody = req.body;
             const newMaster = await masterService.createMaster(requestBody);
@@ -65,9 +65,15 @@ masterRouter.post('/', async (req, res) => {
 // Обновить мастера
 masterRouter.put('/', async (req, res) => {
     try {
-        const requestBody = req.body;
-        const updatedMaster = await masterService.updateMaster(requestBody);
-        res.status(200).json(updatedMaster);
+        // Валидация данных
+        const validationResult = await validateMaster(req.body);
+        if (validationResult.error === true) {
+            res.status(400).json(validationResult.validationErrors);
+        } else {
+            const requestBody = req.body;
+            const updatedMaster = await masterService.updateMaster(requestBody);
+            res.status(200).json(updatedMaster);
+        }
     } catch (err) {
         if (err instanceof NotFoundError) {
             res.status(404).json(err.message);
