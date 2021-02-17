@@ -32,7 +32,7 @@ const MasterProfile: React.FC = () => {
 
     useEffect(() => {
         dispatch(getMasterProfile(id));
-        console.log(master);
+        console.log(currentMaster);
     }, []);
 
     // Окрыть модальное окно удаления
@@ -152,7 +152,7 @@ const MasterProfile: React.FC = () => {
                         error={error ? error : null}
                         master={master}
                         specialisations={specialisations}
-                        // selectedSpec={master.name}
+                        selectedSpec={master.specialisation_id}
                         onCloseModal={closeEditModalHandler}
                         changeHandler={changeHandler}
                         onSelectSpecialisationChange={selectSpecialisationChangeHandler}

@@ -14,7 +14,6 @@ interface MastersModalProps {
     onCloseModal: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     changeHandler: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onSelectSpecialisationChange: (e: ChangeEvent<HTMLSelectElement>) => void;
-    onOptionClick?: (id: number) => void;
     actionClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
@@ -28,7 +27,6 @@ const MastersModal: React.FC<MastersModalProps> = ({
     onCloseModal,
     changeHandler,
     onSelectSpecialisationChange,
-    onOptionClick,
     actionClick,
 }) => {
     return (
@@ -77,21 +75,16 @@ const MastersModal: React.FC<MastersModalProps> = ({
             />
             {error && <p className="modal__content__error">{error.middlename}</p>}
             <select
-                defaultValue="Выберите специализацию"
                 value={selectedSpec}
-                placeholder="Выберите специализацию"
                 className={
                     error?.specialisation
                         ? 'specialisations__select__error'
                         : 'specialisations__select'
                 }
                 onChange={onSelectSpecialisationChange}>
-                <option value="" disabled selected id="modal__content__select-placeholder">
-                    Выберите специализацию
-                </option>
                 {specialisations.map((item: ISpecialisation) => {
                     return (
-                        <option value={item.id} key={item.id} id={item.name}>
+                        <option value={item.id} key={item.id} data-name={item.name}>
                             {item.name}
                         </option>
                     );

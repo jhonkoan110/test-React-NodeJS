@@ -131,7 +131,6 @@ const MastersPage: React.FC = () => {
                         master={master}
                         specialisations={specialisations}
                         isEdit={false}
-                        // selectedSpec={selectedSpec}
                         onCloseModal={closeModalHandler}
                         changeHandler={changeHandler}
                         actionClick={addMasterHandler}

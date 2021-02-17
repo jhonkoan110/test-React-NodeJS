@@ -162,7 +162,7 @@ export const deleteSpecialisation = (id: number, history: any) => (dispatch: any
                             dispatch(specialisationItemFetching(false));
                             dispatch(specialisationError(error));
                         });
-                        break;
+                        return 400;
                     }
 
                     case 404: {
@@ -182,7 +182,13 @@ export const deleteSpecialisation = (id: number, history: any) => (dispatch: any
             dispatch(specialisationItemFetching(false));
             return response;
         })
-        .then(() => history.push('/specialisations'))
+        .then((result) => {
+            if (result >= 400) {
+                return;
+            } else {
+                history.push('/specialisations');
+            }
+        })
         .catch((error) => {
             dispatch(specialisationItemFetching(false));
             dispatch(specialisationError(error));

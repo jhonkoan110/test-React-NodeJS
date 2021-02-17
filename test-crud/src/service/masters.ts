@@ -115,7 +115,7 @@ export const updateMaster = (updatedMaster: IMaster) => (dispatch: any) => {
                             dispatch(masterItemFetching(false));
                             dispatch(setMasterError(error));
                         });
-                        break;
+                        return 400;
                     }
                     default: {
                         throw new Error('Ошибка сервера');
@@ -125,8 +125,20 @@ export const updateMaster = (updatedMaster: IMaster) => (dispatch: any) => {
             dispatch(masterItemFetching(false));
             return response;
         })
-        .then((response) => response.json())
-        .then(() => dispatch(getMasterProfile(updatedMaster.id)))
+        .then((response) => {
+            if (response === 400) {
+                return 400;
+            } else {
+                return response.json();
+            }
+        })
+        .then((response) => {
+            if (response === 400) {
+                return;
+            } else {
+                dispatch(getMasterProfile(updatedMaster.id));
+            }
+        })
         .catch((error) => {
             dispatch(masterListFetching(false));
             dispatch(setMasterError(error));
@@ -149,16 +161,22 @@ export const deleteMaster = (id: number, history: any) => (dispatch: any) => {
                             dispatch(masterItemFetching(false));
                             dispatch(setMasterError(error));
                         });
-                        break;
+                        return 404;
                     }
                     default: {
                         throw new Error('Ошибка сервера');
                     }
                 }
-                dispatch(masterItemFetching(false));
-                return response;
+            }
+            dispatch(masterItemFetching(false));
+            return response;
+        })
+        .then((result) => {
+            if (result === 404) {
+                return;
+            } else {
+                history.push('/masters');
             }
         })
-        .then(() => history.push('/masters'))
         .catch((error) => dispatch(setMasterError(error)));
 };
